@@ -77,6 +77,7 @@
             <button class="tab-button" onclick="showTab('content')">📝 Content</button>
             <button class="tab-button" onclick="showTab('benefits')">⭐ Voordelen</button>
             <button class="tab-button" onclick="showTab('style')">🎨 Stijl</button>
+            <button class="tab-button" onclick="showTab('payment')">💳 Betaling</button>
             <button class="tab-button" onclick="showTab('email')">📧 E-Mail</button>
             <button class="tab-button" onclick="showTab('users')">👥 Gebruikers</button>
         </div>
@@ -320,6 +321,55 @@
                 </div>
             </div>
             
+            <!-- Payment Tab -->
+            <div id="payment-tab" class="tab-content">
+                <div class="card">
+                    <h2>💳 Betaling</h2>
+                    <p class="tab-description">Configureer de betaalmethode voor aanmeldingen. Kies tussen geen betalingsintegratie of Bunq.me.</p>
+                    
+                    <div class="payment-grid">
+                        <!-- Payment Method Selection -->
+                        <div class="form-group">
+                            <label for="config_payment_method">💳 Betaalmethode</label>
+                            <select id="config_payment_method" name="config_payment_method" onchange="togglePaymentFields()">
+                                <option value="none" {% if get_config_value('payment_method', 'none') == 'none' %}selected{% endif %}>Geen betalingsintegratie</option>
+                                <option value="bunq" {% if get_config_value('payment_method', 'none') == 'bunq' %}selected{% endif %}>Bunq.me</option>
+                            </select>
+                            <small>Kies hoe gebruikers kunnen betalen na aanmelding.</small>
+                        </div>
+                        
+                        <!-- Bunq.me Link (only shown when bunq is selected) -->
+                        <div class="form-group" id="bunq_link_group" style="display: none;">
+                            <label for="config_bunq_me_link">🔗 Bunq.me Betaallink</label>
+                            <input type="url" id="config_bunq_me_link" name="config_bunq_me_link" value="{{ get_config_value('bunq_me_link', '') }}" placeholder="https://bunq.me/your-link">
+                            <small>Voer uw Bunq.me betaallink in (zonder bedrag en beschrijving).</small>
+                        </div>
+                        
+                        <!-- No Payment Message (only shown when none is selected) -->
+                        <div class="form-group" id="no_payment_message_group" style="display: none;">
+                            <label for="config_no_payment_message">📝 Bericht bij geen betaling</label>
+                            <textarea id="config_no_payment_message" name="config_no_payment_message" rows="3" placeholder="Bericht dat gebruikers zien na aanmelding">{{ get_config_value('no_payment_message', 'Uw aanmelding is succesvol ontvangen! Wij nemen binnenkort contact met u op voor de betaling.') }}</textarea>
+                            <small>Dit bericht wordt getoond aan gebruikers wanneer er geen betalingsintegratie is.</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Method Info -->
+                    <div class="payment-info">
+                        <h3>ℹ️ Informatie over betaalmethoden</h3>
+                        <div class="payment-method-info">
+                            <div class="method-card">
+                                <h4>🚫 Geen betalingsintegratie</h4>
+                                <p>Gebruikers krijgen een bevestigingsbericht en u neemt later contact op voor de betaling. Geschikt voor kleine evenementen of wanneer u de betaling handmatig wilt afhandelen.</p>
+                            </div>
+                            <div class="method-card">
+                                <h4>💳 Bunq.me</h4>
+                                <p>Gebruikers worden automatisch doorgestuurd naar een Bunq.me betaallink. U moet een Bunq.me account hebben en een betaallink aanmaken. Het bedrag en de beschrijving worden automatisch toegevoegd.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
             <!-- Email Tab -->
             <div id="email-tab" class="tab-content">
                 <div class="card">
@@ -486,6 +536,20 @@
             event.target.classList.add('active');
         }
         
+        function togglePaymentFields() {
+            const paymentMethod = document.getElementById('config_payment_method').value;
+            const bunqLinkGroup = document.getElementById('bunq_link_group');
+            const noPaymentMessageGroup = document.getElementById('no_payment_message_group');
+            
+            if (paymentMethod === 'bunq') {
+                bunqLinkGroup.style.display = 'block';
+                noPaymentMessageGroup.style.display = 'none';
+            } else {
+                bunqLinkGroup.style.display = 'none';
+                noPaymentMessageGroup.style.display = 'block';
+            }
+        }
+        
         // On page load, check for a hash in the URL and show the correct tab
         document.addEventListener('DOMContentLoaded', function() {
             const hash = window.location.hash.substring(1);
@@ -495,6 +559,9 @@
                     tabButton.click();
                 }
             }
+            
+            // Initialize payment fields visibility
+            togglePaymentFields();
         });
 
         // Simple Custom Editor Functions

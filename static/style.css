@@ -1187,6 +1187,58 @@ section {
     line-height: 1.3;
 }
 
+/* Payment Tab Styles */
+.payment-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.payment-info {
+    background: var(--darker-bg);
+    padding: 2rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    margin-top: 2rem;
+}
+
+.payment-info h3 {
+    color: var(--text-color);
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+}
+
+.payment-method-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.method-card {
+    background: var(--card-bg);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.method-card h4 {
+    color: var(--text-color);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.method-card p {
+    color: var(--text-light);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
 /* User Management Styles */
 .user-management {
     display: grid;

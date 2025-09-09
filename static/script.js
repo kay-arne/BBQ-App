@@ -79,16 +79,29 @@ function handleFormSubmit(e) {
         return response.json();
     })
     .then(data => {
-        if (data.paymentUrl) {
+        if (data.paymentMethod === 'bunq' && data.paymentUrl) {
             showMessage('Aanmelding succesvol! U wordt doorgestuurd naar de betaalpagina...', 'success');
             setTimeout(() => {
                 window.location.href = data.paymentUrl;
             }, 2000);
-        } else {
+        } else if (data.paymentMethod === 'none') {
             showMessage(data.message || 'Aanmelding succesvol!', 'success');
             setTimeout(() => {
                 window.location.href = '/success';
             }, 2000);
+        } else {
+            // Fallback for backward compatibility
+            if (data.paymentUrl) {
+                showMessage('Aanmelding succesvol! U wordt doorgestuurd naar de betaalpagina...', 'success');
+                setTimeout(() => {
+                    window.location.href = data.paymentUrl;
+                }, 2000);
+            } else {
+                showMessage(data.message || 'Aanmelding succesvol!', 'success');
+                setTimeout(() => {
+                    window.location.href = '/success';
+                }, 2000);
+            }
         }
     })
     .catch(error => {

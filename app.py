@@ -391,7 +391,10 @@ def initialize_default_config():
         'benefit_4_description': ('Alles inclusief voor een eerlijke prijs - geen verborgen kosten.', 'Beschrijving van voordeel 4', 'benefits'),
         'benefit_4_icon': ('💰', 'Icoon van voordeel 4', 'benefits'),
         'price_per_adult': ('15', 'Prijs per volwassene in euro', 'variables'),
-        'price_per_child': ('8', 'Prijs per kind in euro', 'variables')
+        'price_per_child': ('8', 'Prijs per kind in euro', 'variables'),
+        'payment_method': ('none', 'Betaalmethode (none, bunq)', 'payment'),
+        'bunq_me_link': ('', 'Bunq.me betaallink', 'payment'),
+        'no_payment_message': ('Uw aanmelding is succesvol ontvangen! Wij nemen binnenkort contact met u op voor de betaling.', 'Bericht bij geen betalingsintegratie', 'payment')
     }
     
     for key, (value, description, category) in defaults.items():
@@ -781,16 +784,26 @@ def register_and_pay():
     persons_adults = int(data.get('personsAdults'))
     persons_children = int(data.get('personsChildren', 0))
     allergies_notes = data.get('allergiesNotes', '').strip()
-    # Get prices from database configuration
+    
+    # Get prices and payment method from database configuration
     price_per_adult = float(get_config_value('price_per_adult', '15'))
     price_per_child = float(get_config_value('price_per_child', '8'))
     total_amount = (persons_adults * price_per_adult) + (persons_children * price_per_child)
+    payment_method = get_config_value('payment_method', 'none')
+    bunq_me_link = get_config_value('bunq_me_link', '')
+    no_payment_message = get_config_value('no_payment_message', 'Uw aanmelding is succesvol ontvangen! Wij nemen binnenkort contact met u op voor de betaling.')
 
     payment_url = ""
+    payment_status = "pending"
+    
     try:
-        description = f"BBQ {name} - Huisnr: {house_number}" # Vereenvoudigd betaalkenmerk
-        
-        payment_url = f"{BUNQ_ME_BASE_URL}/{total_amount:.2f}/{description.replace(' ', '%20')}"
+        # Generate payment URL based on payment method
+        if payment_method == 'bunq' and bunq_me_link:
+            description = f"BBQ {name} - Huisnr: {house_number}"
+            payment_url = f"{bunq_me_link}/{total_amount:.2f}/{description.replace(' ', '%20')}"
+        elif payment_method == 'none':
+            payment_url = ""
+            payment_status = "no_payment_required"
 
         with db_pool.get_connection() as conn:
             try:
@@ -798,7 +811,7 @@ def register_and_pay():
                 cursor.execute(
                     '''INSERT INTO registrations (name, house_number, email, persons_adults, persons_children, allergies_notes, total_amount, bunq_me_url, payment_status, paid_amount) 
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
-                    (name, house_number, email, persons_adults, persons_children, allergies_notes, total_amount, payment_url, 'pending', 0.0)
+                    (name, house_number, email, persons_adults, persons_children, allergies_notes, total_amount, payment_url, payment_status, 0.0)
                 )
                 registration_id = cursor.lastrowid
                 conn.commit()
@@ -808,14 +821,23 @@ def register_and_pay():
                 # --- E-mails versturen ---
                 if email:
                     subject_user = "Bevestiging aanmelding Buurt BBQ"
+                    
+                    # Different email content based on payment method
+                    if payment_method == 'bunq' and payment_url:
+                        payment_info = f"<p>Het totaalbedrag is <strong>€{total_amount:.2f}</strong>. U kunt betalen via de volgende link: <a href='{payment_url}'>Klik hier om te betalen</a></p>"
+                        payment_status_text = "Uw aanmelding en betaling worden nu door ons geverifieerd."
+                    else:
+                        payment_info = f"<p>Het totaalbedrag is <strong>€{total_amount:.2f}</strong>.</p><p>{no_payment_message}</p>"
+                        payment_status_text = "Uw aanmelding is succesvol ontvangen."
+                    
                     body_user = f"""
                     <html>
                     <body>
                         <p>Beste {name} (Kamperweg {house_number}),</p>
                         <p>Hartelijk dank voor je aanmelding voor de Buurt BBQ!</p>
                         <p>Je hebt je aangemeld voor <strong>{persons_adults} volwassene(n)</strong> en <strong>{persons_children} kind(eren)</strong>.</p>
-                        <p>Het totaalbedrag voor de volwassenen is <strong>€{total_amount:.2f}</strong>.</p>
-                        <p>Uw aanmelding en betaling worden nu door ons geverifieerd. Zodra alles in orde is, ontvangt u een aparte e-mail met een definitieve bevestiging.</p>
+                        {payment_info}
+                        <p>{payment_status_text}</p>
                         <p>Datum BBQ: {get_config_value('date', 'zaterdag 6 september')}. Locatie: {get_config_value('location', 'familie Smit aan de Kamperweg 46')}.</p>
                         <p>Uiterste opgavedatum: {get_config_value('deadline', '22 augustus')}.</p>
                         <p>We kijken ernaar uit u te zien!</p>
@@ -829,6 +851,17 @@ def register_and_pay():
 
                 # E-mail naar de organisator met tabeloverzicht
                 subject_organizer = f"NIEUWE BBQ AANMELDING: {name} (Kamperweg {house_number})"
+                
+                # Different organizer email content based on payment method
+                if payment_method == 'bunq' and payment_url:
+                    payment_status_text = "Pending (via Bunq.me)"
+                    payment_link_text = f"<a href='{payment_url}'>{payment_url}</a>"
+                    payment_instructions = "<p>Controleer de betaling handmatig in je Bunq app en werk de status bij in het admin-paneel.</p>"
+                else:
+                    payment_status_text = "Geen betalingsintegratie"
+                    payment_link_text = "N.V.T."
+                    payment_instructions = "<p>Neem contact op met de deelnemer voor de betaling.</p>"
+                
                 body_organizer = f"""
                 <html>
                 <head>
@@ -877,12 +910,12 @@ def register_and_pay():
                             <td>€{total_amount:.2f}</td>
                         </tr>
                         <tr>
-                            <td><strong>Betalingsstatus (initieel):</strong></td>
-                            <td>Pending (via Bunq.me)</td>
+                            <td><strong>Betalingsstatus:</strong></td>
+                            <td>{payment_status_text}</td>
                         </tr>
                         <tr>
-                            <td><strong>Bunq.me Link:</strong></td>
-                            <td><a href="{payment_url}">{payment_url}</a></td>
+                            <td><strong>Betaallink:</strong></td>
+                            <td>{payment_link_text}</td>
                         </tr>
                         <tr>
                             <td><strong>Datum aanmelding:</strong></td>
@@ -894,7 +927,7 @@ def register_and_pay():
                         </tr>
                     </table>
                     
-                    <p>Controleer de betaling handmatig in je Bunq app en werk de status bij in het admin-paneel:</p>
+                    {payment_instructions}
                     <p><a href="{request.url_root}admin">Ga naar het BBQ Admin Paneel</a></p>
                     
                     <p>Met vriendelijke groet,</p>
@@ -905,11 +938,20 @@ def register_and_pay():
                 if not send_email(ORGANIZER_EMAIL, subject_organizer, body_organizer):
                     flash(f'Fout bij versturen notificatiemail naar {ORGANIZER_EMAIL}.', 'error')
 
-                return jsonify({
-                    'message': 'Aanmelding succesvol! Je wordt nu doorgestuurd naar de betaalpagina.',
-                    'paymentUrl': payment_url,
-                    'registrationId': registration_id
-                })
+                # Return different response based on payment method
+                if payment_method == 'bunq' and payment_url:
+                    return jsonify({
+                        'message': 'Aanmelding succesvol! Je wordt nu doorgestuurd naar de betaalpagina.',
+                        'paymentUrl': payment_url,
+                        'registrationId': registration_id,
+                        'paymentMethod': 'bunq'
+                    })
+                else:
+                    return jsonify({
+                        'message': no_payment_message,
+                        'registrationId': registration_id,
+                        'paymentMethod': 'none'
+                    })
 
             except sqlite3.Error as e:
                 conn.rollback()
