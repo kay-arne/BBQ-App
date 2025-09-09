@@ -401,7 +401,9 @@ def initialize_default_config():
         'price_per_child': ('12', 'Prijs per kind in euro', 'variables'),
         'payment_method': ('none', 'Betaalmethode (none, bunq)', 'payment'),
         'bunq_me_link': ('', 'Bunq.me betaallink', 'payment'),
-        'no_payment_message': ('Uw aanmelding is succesvol ontvangen! Wij nemen binnenkort contact met u op voor de betaling.', 'Bericht bij geen betalingsintegratie', 'payment')
+        'no_payment_message': ('Uw aanmelding is succesvol ontvangen! Wij nemen binnenkort contact met u op voor de betaling.', 'Bericht bij geen betalingsintegratie', 'payment'),
+        'not_planned_mode': ('0', 'Niet gepland modus (0=uit, 1=aan)', 'content'),
+        'not_planned_text': ('De volgende BBQ is nog niet gepland. Houd deze pagina in de gaten voor updates!', 'Alternatieve tekst voor niet gepland modus', 'content')
     }
     
     for key, (value, description, category) in defaults.items():

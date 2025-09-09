@@ -328,6 +328,46 @@ section {
     box-shadow: var(--shadow-medium);
 }
 
+/* Not Planned Mode Styling */
+.not-planned-message {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+    text-align: center;
+}
+
+.not-planned-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.not-planned-content h1,
+.not-planned-content h2,
+.not-planned-content h3 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+}
+
+.not-planned-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    color: var(--text-light);
+}
+
+.not-planned-content ul,
+.not-planned-content ol {
+    text-align: left;
+    max-width: 600px;
+    margin: 0 auto 1.5rem auto;
+}
+
+.not-planned-content li {
+    margin-bottom: 0.5rem;
+    color: var(--text-light);
+}
+
 .form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;

@@ -100,6 +100,25 @@
         </div>
     </section>
 
+    <!-- Registration Form Section or Not Planned Message -->
+    {% if get_config_value('not_planned_mode', '0') == '1' %}
+    <!-- Not Planned Mode -->
+    <section class="registration-section" id="registration-form">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">📅 BBQ NIET GEPLAND</h2>
+            </div>
+            
+            <div class="registration-form-container">
+                <div class="not-planned-message">
+                    <div class="not-planned-content">
+                        {{ get_config_value('not_planned_text', 'De volgende BBQ is nog niet gepland. Houd deze pagina in de gaten voor updates!') | safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% else %}
     <!-- Registration Form Section -->
     <section class="registration-section" id="registration-form">
         <div class="container">
@@ -165,6 +184,7 @@
             </div>
         </div>
     </section>
+    {% endif %}
 
     <!-- Footer -->
     <footer class="footer">
