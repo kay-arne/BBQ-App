@@ -1228,6 +1228,10 @@ signal.signal(signal.SIGTERM, signal_handler)
 signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == '__main__':
-    logger.info("Starting BBQ application with performance optimizations...")
-    debug_mode = os.getenv('FLASK_ENV') != 'production'
-    app.run(host='0.0.0.0', debug=debug_mode, port=3000, threaded=True)
+    # Only run development server if explicitly requested
+    if os.getenv('FLASK_ENV') == 'development':
+        logger.info("Starting BBQ application in development mode...")
+        app.run(host='0.0.0.0', debug=True, port=3000, threaded=True)
+    else:
+        logger.info("Production mode detected. Use Gunicorn to run the application.")
+        logger.info("Run with: gunicorn --bind 0.0.0.0:3000 --workers 2 app:app")
