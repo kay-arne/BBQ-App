@@ -114,34 +114,24 @@ body {
 }
 
 .hero-title {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    font-weight: 800;
-    line-height: 1.1;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.2;
     margin-bottom: 1.5rem;
     color: var(--text-color);
     text-transform: uppercase;
     letter-spacing: -0.02em;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .hero-subtitle {
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
-    font-weight: 500;
-    line-height: 1.4;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 400;
+    line-height: 1.5;
     margin-bottom: 2.5rem;
-    color: var(--text-color);
-    max-width: 700px;
+    color: var(--text-light);
+    max-width: 600px;
     margin-left: auto;
     margin-right: auto;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(135deg, var(--text-color), var(--text-light));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 /* Buttons */
@@ -232,27 +222,65 @@ section {
 .invitation-content {
     max-width: 1200px;
     margin: 0 auto;
-    background: var(--card-bg);
-    padding: 3rem;
+    background: linear-gradient(135deg, var(--card-bg) 0%, #333333 100%);
+    padding: 4rem;
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow-medium);
+    box-shadow: var(--shadow-heavy);
+    border: 2px solid var(--primary-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.invitation-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--primary-color));
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+    0%, 100% { background-position: 200% 0; }
+    50% { background-position: -200% 0; }
 }
 
 .invitation-content h1,
 .invitation-content h2,
 .invitation-content h3 {
     color: var(--text-color);
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
+}
+
+.invitation-content h2 {
+    font-size: 2.2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 2rem;
 }
 
 .invitation-content p {
     color: var(--text-light);
-    margin-bottom: 1.5rem;
-    line-height: 1.7;
+    margin-bottom: 1.8rem;
+    line-height: 1.8;
+    font-size: 1.1rem;
+    position: relative;
+    z-index: 1;
 }
 
 .invitation-content strong {
     color: var(--primary-color);
+    font-weight: 600;
+    text-shadow: 0 0 8px rgba(255, 140, 0, 0.3);
 }
 
 /* Benefits Section */
@@ -473,7 +501,15 @@ section {
     }
     
     .invitation-content {
-        padding: 2rem 1.5rem;
+        padding: 3rem 2rem;
+    }
+    
+    .invitation-content h2 {
+        font-size: 1.8rem;
+    }
+    
+    .invitation-content p {
+        font-size: 1rem;
     }
     
     section {
@@ -514,7 +550,15 @@ section {
     }
     
     .invitation-content {
-        padding: 1.5rem 1rem;
+        padding: 2rem 1.5rem;
+    }
+    
+    .invitation-content h2 {
+        font-size: 1.6rem;
+    }
+    
+    .invitation-content p {
+        font-size: 0.95rem;
     }
     
     .benefit-cards {
