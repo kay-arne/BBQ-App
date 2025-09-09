@@ -124,18 +124,22 @@ ports:
 
 **IMPORTANT**: The application uses Docker volumes to persist data:
 
-- **`bbq_db`**: Contains the SQLite database (`bbq.db`) with all registrations and configuration
-- **`bbq_data`**: Contains uploaded images and static files
+- **`bbq_database`**: Contains the SQLite database (`/app/data/bbq.db`) with all registrations and configuration
+- **`bbq_uploads`**: Contains uploaded images and static files (`/app/static/uploads`)
 
 These volumes ensure your data survives container restarts and updates. The database is automatically created on first run.
 
 **Backup your data**:
 ```bash
 # Backup the database
-docker cp bbq-app_bbq-app_1:/app/bbq.db ./backup-bbq.db
+docker cp bbq-app_bbq-app_1:/app/data/bbq.db ./backup-bbq.db
 
 # Backup uploaded files
 docker cp bbq-app_bbq-app_1:/app/static/uploads ./backup-uploads
+
+# Or backup entire volumes
+docker run --rm -v bbq_database:/data -v $(pwd):/backup alpine tar czf /backup/database-backup.tar.gz -C /data .
+docker run --rm -v bbq_uploads:/data -v $(pwd):/backup alpine tar czf /backup/uploads-backup.tar.gz -C /data .
 ```
 
 ## Security Considerations

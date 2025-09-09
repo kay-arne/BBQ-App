@@ -7,9 +7,10 @@ services:
       - FLASK_ENV=production
       - SECRET_KEY=${SECRET_KEY:-your-secret-key-change-this}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD:-change-this-strong-password}
+      - DATABASE_PATH=/app/data/bbq.db
     volumes:
-      - bbq_data:/app/static/uploads
-      - bbq_db:/app
+      - bbq_uploads:/app/static/uploads
+      - bbq_database:/app/data
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/"]
@@ -19,5 +20,5 @@ services:
       start_period: 40s
 
 volumes:
-  bbq_data:
-  bbq_db:
+  bbq_uploads:
+  bbq_database:

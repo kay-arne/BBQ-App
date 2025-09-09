@@ -22,8 +22,8 @@ RUN pip install --upgrade setuptools>=78.1.1
 # Copy application files
 COPY . .
 
-# Create uploads directory
-RUN mkdir -p static/uploads
+# Create uploads and data directories
+RUN mkdir -p static/uploads && mkdir -p data
 
 # Create non-root user for security
 RUN useradd --create-home --shell /bin/bash app && \
