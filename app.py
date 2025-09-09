@@ -380,7 +380,7 @@ def initialize_default_config():
         'smtp_username': (SMTP_USERNAME or '', 'SMTP gebruikersnaam', 'email'),
         'smtp_password': (SMTP_PASSWORD or '', 'SMTP wachtwoord', 'email'),
         'organizer_email': (ORGANIZER_EMAIL or '', 'E-mailadres van de organisator', 'email'),
-        'hero_image': ('bbq_achtergrond.png', 'Hero afbeelding', 'appearance'),
+        'hero_image': ('bbq_achtergrond.png', 'Hero afbeelding', 'content'),
         'primary_color': ('#FF8C00', 'Primaire kleur van de applicatie', 'appearance'),
         'secondary_color': ('#FF6B35', 'Secundaire kleur van de applicatie', 'appearance'),
         'hero_title': ('WELKOM BIJ ONZE JAARLIJKSE BUURT BBQ', 'Hero titel op de hoofdpagina', 'content'),
@@ -668,8 +668,8 @@ def update_config():
             for setting in category_settings
         }
 
-        # Handle file upload for the 'style' tab
-        if active_tab == 'style' and 'hero_image' in request.files:
+        # Handle file upload for the 'content' tab
+        if active_tab == 'content' and 'hero_image' in request.files:
             file = request.files['hero_image']
             if file and file.filename and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
@@ -678,7 +678,7 @@ def update_config():
                 filepath = os.path.join(UPLOAD_FOLDER, filename)
                 file.save(filepath)
                 # Use set_config to preserve description and category for new uploads
-                set_config('hero_image', f'uploads/{filename}', description='Hero afbeelding', category='appearance')
+                set_config('hero_image', f'uploads/{filename}', description='Hero afbeelding', category='content')
                 flash('Hero afbeelding succesvol geüpload!', 'success')
 
         # Process and save only the form fields relevant to the active tab
@@ -706,8 +706,7 @@ def reset_style_config():
         # Get default style configuration only
         default_style_config = {
             'primary_color': '#FF8C00',
-            'secondary_color': '#FF6B35',
-            'hero_image': 'bbq_achtergrond.png'
+            'secondary_color': '#FF6B35'
         }
         
         # Reset only style configuration values
