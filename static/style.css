@@ -582,6 +582,9 @@ section {
     background: var(--darker-bg);
     min-height: 100vh;
     padding-top: 80px; /* Account for fixed navbar */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
 }
 
 .admin-container {
@@ -601,9 +604,11 @@ section {
 
 .admin-header h1 {
     color: var(--text-color);
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 700;
     margin: 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
 }
 
 .admin-header p {
@@ -620,11 +625,12 @@ section {
 .admin-nav-right .nav-link {
     color: var(--text-light);
     text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 0.75rem 1.5rem;
     border-radius: var(--border-radius-small);
     transition: var(--transition);
+    letter-spacing: 0.01em;
 }
 
 .admin-nav-right .nav-link:hover {
@@ -651,26 +657,32 @@ section {
 
 .stat-number {
     display: block;
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 2.5rem;
+    font-weight: 800;
     color: var(--primary-color);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: -0.02em;
+    line-height: 1;
 }
 
 .stat-label {
     display: block;
     color: var(--text-light);
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    line-height: 1.3;
 }
 
 /* Admin Table Styles */
 .admin-page h2 {
     color: var(--text-color);
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
     padding-left: 0.5rem;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
 }
 
 .table-container {
@@ -693,19 +705,24 @@ section {
 }
 
 .admin-page table th {
-    padding: 1rem 0.75rem;
+    padding: 1.25rem 1rem;
     text-align: left;
     color: var(--text-color);
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 1rem;
     border-bottom: 2px solid var(--border-color);
+    letter-spacing: 0.01em;
+    line-height: 1.4;
 }
 
 .admin-page table td {
-    padding: 1rem 0.75rem;
+    padding: 1.25rem 1rem;
     color: var(--text-light);
     border-bottom: 1px solid var(--border-color);
     vertical-align: middle;
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.5;
 }
 
 .admin-page table tbody tr:hover {
@@ -729,11 +746,13 @@ section {
 
 .admin-form h3 {
     color: var(--text-color);
-    font-size: 1.3rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    padding-bottom: 0.75rem;
     border-bottom: 2px solid var(--primary-color);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
 }
 
 .admin-form .form-group {
@@ -743,23 +762,27 @@ section {
 .admin-form .form-group label {
     display: block;
     color: var(--text-color);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
 }
 
 .admin-form .form-group input,
 .admin-form .form-group textarea,
 .admin-form .form-group select {
     width: 100%;
-    padding: 0.75rem;
+    padding: 1rem 1.25rem;
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius-small);
     background: var(--darker-bg);
     color: var(--text-color);
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: 500;
     transition: var(--transition);
     box-sizing: border-box;
+    line-height: 1.5;
 }
 
 .admin-form .form-group input:focus,
@@ -837,16 +860,18 @@ section {
 
 /* Admin Button Styles */
 .admin-page .btn {
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 2rem;
     border: none;
     border-radius: var(--border-radius-small);
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 1rem;
     cursor: pointer;
     transition: var(--transition);
     text-decoration: none;
     display: inline-block;
     text-align: center;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
 }
 
 .admin-page .btn-primary {
@@ -1017,16 +1042,18 @@ section {
 }
 
 .tab-button {
-    padding: 0.75rem 1.5rem;
+    padding: 1rem 2rem;
     border: 2px solid var(--border-color);
     background: var(--darker-bg);
     color: var(--text-light);
     border-radius: var(--border-radius-small);
     cursor: pointer;
-    font-weight: 500;
-    font-size: 0.9rem;
+    font-weight: 600;
+    font-size: 1rem;
     transition: var(--transition);
     white-space: nowrap;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
 }
 
 .tab-button:hover {
@@ -1056,18 +1083,22 @@ section {
 
 .tab-content h2 {
     color: var(--text-color);
-    font-size: 1.5rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
     border-bottom: 2px solid var(--primary-color);
+    letter-spacing: -0.01em;
+    line-height: 1.3;
 }
 
 .tab-description {
     color: var(--text-light);
-    margin-bottom: 1.5rem;
-    font-size: 0.95rem;
-    line-height: 1.5;
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    line-height: 1.6;
+    letter-spacing: 0.01em;
 }
 
 /* Config Form Styles */
@@ -1078,23 +1109,27 @@ section {
 .config-tabs + form .form-group label {
     display: block;
     color: var(--text-color);
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    font-size: 0.9rem;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    letter-spacing: 0.01em;
+    line-height: 1.4;
 }
 
 .config-tabs + form .form-group input,
 .config-tabs + form .form-group textarea,
 .config-tabs + form .form-group select {
     width: 100%;
-    padding: 0.75rem;
+    padding: 1rem 1.25rem;
     border: 2px solid var(--border-color);
     border-radius: var(--border-radius-small);
     background: var(--darker-bg);
     color: var(--text-color);
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-weight: 500;
     transition: var(--transition);
     box-sizing: border-box;
+    line-height: 1.5;
 }
 
 .config-tabs + form .form-group input:focus,
@@ -1108,8 +1143,11 @@ section {
 .config-tabs + form .form-group small {
     display: block;
     color: var(--text-light);
-    font-size: 0.8rem;
-    margin-top: 0.25rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-top: 0.5rem;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
 }
 
 /* Variables Grid */
@@ -1135,12 +1173,14 @@ section {
 
 .benefit-section h3 {
     color: var(--text-color);
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.75rem;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
 }
 
 /* User Management Styles */
@@ -1159,9 +1199,11 @@ section {
 
 .user-form h3 {
     color: var(--text-color);
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
 }
 
 .user-table {
@@ -1173,9 +1215,11 @@ section {
 
 .user-table h3 {
     color: var(--text-color);
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
 }
 
 .user-table table {
@@ -1185,25 +1229,33 @@ section {
 
 .user-table th,
 .user-table td {
-    padding: 0.75rem;
+    padding: 1rem;
     text-align: left;
     border-bottom: 1px solid var(--border-color);
 }
 
 .user-table th {
     color: var(--text-color);
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 1rem;
     background: var(--card-bg);
+    letter-spacing: 0.01em;
+    line-height: 1.4;
 }
 
 .user-table td {
     color: var(--text-light);
+    font-size: 0.95rem;
+    font-weight: 500;
+    line-height: 1.5;
 }
 
 .user-table .btn {
-    padding: 0.5rem 1rem;
+    padding: 0.75rem 1.25rem;
     margin: 0.25rem;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
 }
 
 /* Save Button Container */
@@ -1215,12 +1267,14 @@ section {
 }
 
 .btn-save {
-    padding: 1rem 3rem;
-    font-size: 1.1rem;
-    font-weight: 600;
+    padding: 1.25rem 3.5rem;
+    font-size: 1.2rem;
+    font-weight: 700;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-medium);
     transition: var(--transition);
+    letter-spacing: 0.01em;
+    line-height: 1.4;
 }
 
 .btn-save:hover {
