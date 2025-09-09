@@ -143,6 +143,23 @@
                     <h2>📝 Content</h2>
                     <p class="tab-description">Beheer de hoofdinhoud van de aanmeldpagina. Gebruik de knoppen om tekst te formatteren en variabelen in te voegen.</p>
                     
+                    <!-- Hero Configuration -->
+                    <div class="hero-config-section">
+                        <h3>🎯 Hero Sectie</h3>
+                        <div class="form-group">
+                            <label for="config_hero_title">Hero Titel</label>
+                            <input type="text" id="config_hero_title" name="config_hero_title" value="{{ get_config_value('hero_title', '') }}" placeholder="Hero titel op de hoofdpagina">
+                            <small>De grote titel die bovenaan de pagina wordt getoond</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="config_hero_subtitle">Hero Ondertitel</label>
+                            <textarea id="config_hero_subtitle" name="config_hero_subtitle" rows="3" placeholder="Hero ondertitel op de hoofdpagina">{{ get_config_value('hero_subtitle', '') }}</textarea>
+                            <small>De ondertitel die onder de hero titel wordt getoond</small>
+                        </div>
+                    </div>
+                    
+                    <!-- Main Content -->
                     {% for setting in configs.get('content', []) %}
                         {% if setting.key == 'main_content' %}
                         <div class="form-group">

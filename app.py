@@ -375,7 +375,9 @@ def initialize_default_config():
         'organizer_email': (ORGANIZER_EMAIL or '', 'E-mailadres van de organisator', 'email'),
         'background_image': ('bbq_achtergrond.png', 'Achtergrondafbeelding', 'appearance'),
         'primary_color': ('#FF8C00', 'Primaire kleur van de applicatie', 'appearance'),
-        'secondary_color': ('#FF6B35', 'Secundaire kleur van de applicatie', 'appearance')
+        'secondary_color': ('#FF6B35', 'Secundaire kleur van de applicatie', 'appearance'),
+        'hero_title': ('DE BBQ DIE JOUW EVENEMENT TRANSFORMEERT IN EEN GASTRONOMISCHE ERVARING', 'Hero titel op de hoofdpagina', 'content'),
+        'hero_subtitle': ('Edel vlees, onweerstaanbare bijgerechten en een complete service zodat jij de gast bent op je eigen feest.', 'Hero ondertitel op de hoofdpagina', 'content')
     }
     
     for key, (value, description, category) in defaults.items():

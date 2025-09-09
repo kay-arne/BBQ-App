@@ -20,6 +20,8 @@
             --darker-bg: #0f0f0f;
             --text-white: #ffffff;
             --text-light: #e0e0e0;
+            --card-bg: #2a2a2a;
+            --border-color: #404040;
         }
         
         {% if get_config_value('background_image') %}
@@ -47,139 +49,52 @@
     <section class="hero-section">
         <div class="hero-overlay">
             <div class="hero-content">
-                <h1 class="hero-title">DE BBQ DIE JOUW EVENEMENT TRANSFORMEERT IN EEN GASTRONOMISCHE ERVARING</h1>
-                <p class="hero-subtitle">Edel vlees, onweerstaanbare bijgerechten en een complete service zodat jij de gast bent op je eigen feest.</p>
+                <h1 class="hero-title">{{ get_config_value('hero_title', 'DE BBQ DIE JOUW EVENEMENT TRANSFORMEERT IN EEN GASTRONOMISCHE ERVARING') }}</h1>
+                <p class="hero-subtitle">{{ get_config_value('hero_subtitle', 'Edel vlees, onweerstaanbare bijgerechten en een complete service zodat jij de gast bent op je eigen feest.') }}</p>
                 <button class="cta-button primary" onclick="scrollToForm()">Ik wil deze ervaring beleven</button>
             </div>
         </div>
     </section>
 
-    <!-- Event Types Section -->
-    <section class="event-types-section">
+    <!-- Invitation Text Section -->
+    <section class="invitation-section">
         <div class="container">
-            <div class="section-header">
-                <h2 class="section-subtitle">VOOR ELK TYPE VIERING</h2>
-                <h3 class="section-title">KIES DE GELEGENHEID, WIJ BRENGEN DE GOURMET ERVARING NAAR JOU</h3>
-            </div>
-            
-            <div class="event-cards">
-                <div class="event-card">
-                    <div class="event-image">
-                        <img src="{{ url_for('static', filename='bbq_achtergrond.png') }}" alt="Verjaardagen">
-                    </div>
-                    <h4 class="event-title">VERJAARDAGEN</h4>
-                    <p class="event-description">Transformeren vieringen in onvergetelijke momenten, met premium vlees en ambachtelijke desserts.</p>
-                </div>
-                
-                <div class="event-card">
-                    <div class="event-image">
-                        <img src="{{ url_for('static', filename='bbq_achtergrond.png') }}" alt="Bedrijfsevenementen">
-                    </div>
-                    <h4 class="event-title">BEDRIJFSEVENEMENTEN</h4>
-                    <p class="event-description">Of het nu voor teamintegratie of klantenontvangst is, wij bieden een gourmet BBQ die indruk maakt.</p>
-                </div>
-                
-                <div class="event-card">
-                    <div class="event-image">
-                        <img src="{{ url_for('static', filename='bbq_achtergrond.png') }}" alt="Speciale bijeenkomsten">
-                    </div>
-                    <h4 class="event-title">SPECIALE BIJEENKOMSTEN</h4>
-                    <p class="event-description">Van vriendenbijeenkomsten tot familiefeesten, elk detail wordt met zorg voorbereid om het moment uniek te maken.</p>
-                </div>
-            </div>
-            
-            <div class="section-cta">
-                <button class="cta-button secondary" onclick="scrollToForm()">Huur nu</button>
+            <div class="invitation-content">
+                {{ render_main_content() | safe }}
             </div>
         </div>
     </section>
 
-    <!-- Why Choose Us Section -->
-    <section class="why-choose-section">
+    <!-- Benefits Section -->
+    <section class="benefits-section">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-subtitle">WAAROM KAMPERWEG BBQ?</h2>
-                <h3 class="section-title">DE BESTE BBQ ERVARING DIE JE KUNT BELEVEN</h3>
+                <h2 class="section-title">WAAROM DEELNEMEN AAN ONZE BBQ?</h2>
             </div>
             
             <div class="benefit-cards">
                 <div class="benefit-card">
-                    <div class="benefit-icon">🔥</div>
-                    <h4 class="benefit-title">EDEL VLEES</h4>
-                    <p class="benefit-description">Selectie van premium vlees bereid op het perfecte punt.</p>
-                </div>
-                
-                <div class="benefit-card">
-                    <div class="benefit-icon">👨‍🍳</div>
-                    <h4 class="benefit-title">COMPLETE ERVARING</h4>
-                    <p class="benefit-description">Alles compleet, met bijgerechten en ambachtelijke desserts.</p>
+                    <div class="benefit-icon">🍖</div>
+                    <h3 class="benefit-title">HEERLIJK VLEES</h3>
+                    <p class="benefit-description">Geniet van premium vlees dat perfect bereid wordt door onze ervaren BBQ-chefs.</p>
                 </div>
                 
                 <div class="benefit-card">
                     <div class="benefit-icon">👥</div>
-                    <h4 class="benefit-title">GESPECIALISEERD TEAM</h4>
-                    <p class="benefit-description">Toegewijde professionals om evenementen in herinneringen te transformeren.</p>
+                    <h3 class="benefit-title">BUURTGEVOEL</h3>
+                    <p class="benefit-description">Ontmoet je buren en bouw nieuwe vriendschappen in een gezellige sfeer.</p>
                 </div>
                 
                 <div class="benefit-card">
-                    <div class="benefit-icon">😌</div>
-                    <h4 class="benefit-title">TOTAAL COMFORT</h4>
-                    <p class="benefit-description">Jij geniet van elk moment zonder zorgen.</p>
-                </div>
-            </div>
-            
-            <div class="section-cta">
-                <button class="cta-button secondary" onclick="scrollToForm()">Maak je afspraak</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- How It Works Section -->
-    <section class="how-it-works-section">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-subtitle">STAP VOOR STAP</h2>
-                <h3 class="section-title">HOE IS HET PROCES?</h3>
-            </div>
-            
-            <div class="steps-list">
-                <div class="step-item">
-                    <div class="step-number">1</div>
-                    <p class="step-text">Jij kiest de gelegenheid – verjaardag, bedrijfsevenement of bijeenkomst.</p>
+                    <div class="benefit-icon">🎉</div>
+                    <h3 class="benefit-title">GEZELLIGHEID</h3>
+                    <p class="benefit-description">Een ontspannen avond met lekker eten, drankjes en gezellige gesprekken.</p>
                 </div>
                 
-                <div class="step-item">
-                    <div class="step-number">2</div>
-                    <p class="step-text">Wij stellen het ideale menu samen – edel vlees, bijgerechten en desserts.</p>
-                </div>
-                
-                <div class="step-item">
-                    <div class="step-number">3</div>
-                    <p class="step-text">Wij zorgen voor alles op de dag – structuur, bereiding en complete service.</p>
-                </div>
-                
-                <div class="step-item">
-                    <div class="step-number">4</div>
-                    <p class="step-text">Jij geniet als gast – ontspan en beleef het moment.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Us Section -->
-    <section class="about-section">
-        <div class="container">
-            <div class="about-content">
-                <div class="about-text">
-                    <h2 class="section-subtitle">MEER DAN BBQ UNIEKE MOMENTEN</h2>
-                    <h3 class="section-title">MEER DAN BBQ, UNIEKE MOMENTEN</h3>
-                    <p class="about-description">
-                        Opgericht door de buurt Kamperweg, is de Kamperweg BBQ ontstaan uit de passie om de traditie van de Nederlandse BBQ te verenigen met een premium ervaring. Met geselecteerd vlees, bijgerechten bereid met excellentie en een toegewijd team, brengen wij de BBQ tot jouw evenement om herinneringen te creëren die voor altijd blijven. Jouw evenement verdient het om onvergetelijk te zijn. Vraag nu je offerte aan en ontdek hoe het is om gast te zijn op je eigen feest.
-                    </p>
-                    <button class="cta-button secondary" onclick="scrollToForm()">Maak je afspraak</button>
-                </div>
-                <div class="about-image">
-                    <img src="{{ url_for('static', filename='bbq_achtergrond.png') }}" alt="Chef">
+                <div class="benefit-card">
+                    <div class="benefit-icon">💰</div>
+                    <h3 class="benefit-title">GOEDE PRIJS</h3>
+                    <p class="benefit-description">Alles inclusief voor een eerlijke prijs - geen verborgen kosten.</p>
                 </div>
             </div>
         </div>
@@ -189,8 +104,8 @@
     <section class="registration-section" id="registration-form">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-subtitle">PLAN GEMAKKELIJK</h2>
-                <h3 class="section-title">MAAK NU JE RESERVERING</h3>
+                <h2 class="section-title">MELD JE AAN</h2>
+                <p class="section-subtitle">Vul het formulier hieronder in om deel te nemen aan onze BBQ</p>
             </div>
             
             <div class="registration-form-container">
@@ -244,7 +159,7 @@
                     </div>
                     
                     <button type="submit" class="cta-button primary submit-button">
-                        <span class="button-text">VERZENDEN</span>
+                        <span class="button-text">AANMELDEN</span>
                         <span class="button-loading" style="display: none;">Verzenden...</span>
                     </button>
                 </form>

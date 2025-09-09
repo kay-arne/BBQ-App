@@ -1,4 +1,4 @@
-/* Modern BBQ App Styles - Dark Theme with Orange Accents */
+/* Modern BBQ App Styles - Simplified Dark Theme */
 
 /* CSS Custom Properties for consistent theming */
 :root {
@@ -193,16 +193,7 @@ section {
 /* Section Headers */
 .section-header {
     text-align: center;
-    margin-bottom: 4rem;
-}
-
-.section-subtitle {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--primary-color);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 0.5rem;
+    margin-bottom: 3rem;
 }
 
 .section-title {
@@ -212,66 +203,49 @@ section {
     text-transform: uppercase;
     letter-spacing: -0.02em;
     line-height: 1.2;
+    margin-bottom: 1rem;
 }
 
-/* Event Types Section */
-.event-types-section {
+.section-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Invitation Section */
+.invitation-section {
     background: var(--background-color);
 }
 
-.event-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
-
-.event-card {
+.invitation-content {
+    max-width: 800px;
+    margin: 0 auto;
     background: var(--card-bg);
+    padding: 3rem;
     border-radius: var(--border-radius);
-    overflow: hidden;
-    box-shadow: var(--shadow-light);
-    transition: var(--transition);
-}
-
-.event-card:hover {
-    transform: translateY(-5px);
     box-shadow: var(--shadow-medium);
 }
 
-.event-image {
-    height: 200px;
-    overflow: hidden;
-}
-
-.event-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    transition: var(--transition);
-}
-
-.event-card:hover .event-image img {
-    transform: scale(1.05);
-}
-
-.event-title {
-    font-size: 1.2rem;
-    font-weight: 700;
+.invitation-content h1,
+.invitation-content h2,
+.invitation-content h3 {
     color: var(--text-color);
-    text-transform: uppercase;
-    margin: 1.5rem 1.5rem 1rem;
-    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
 }
 
-.event-description {
+.invitation-content p {
     color: var(--text-light);
-    margin: 0 1.5rem 1.5rem;
-    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
 }
 
-/* Why Choose Section */
-.why-choose-section {
+.invitation-content strong {
+    color: var(--primary-color);
+}
+
+/* Benefits Section */
+.benefits-section {
     background: var(--darker-bg);
 }
 
@@ -279,12 +253,20 @@ section {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
-    margin-bottom: 3rem;
 }
 
 .benefit-card {
     text-align: center;
-    padding: 2rem 1rem;
+    padding: 2rem 1.5rem;
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    transition: var(--transition);
+}
+
+.benefit-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
 }
 
 .benefit-icon {
@@ -294,7 +276,7 @@ section {
 }
 
 .benefit-title {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--text-color);
     text-transform: uppercase;
@@ -305,81 +287,6 @@ section {
 .benefit-description {
     color: var(--text-light);
     line-height: 1.6;
-}
-
-/* How It Works Section */
-.how-it-works-section {
-    background: var(--background-color);
-}
-
-.steps-list {
-    max-width: 800px;
-    margin: 0 auto;
-}
-
-.step-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
-    padding: 1.5rem;
-    background: var(--card-bg);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-light);
-}
-
-.step-number {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 50px;
-    height: 50px;
-    background: var(--primary-color);
-    color: var(--text-color);
-    border-radius: 50%;
-    font-weight: 700;
-    font-size: 1.2rem;
-    flex-shrink: 0;
-}
-
-.step-text {
-    color: var(--text-light);
-    line-height: 1.6;
-    font-size: 1.1rem;
-}
-
-/* About Section */
-.about-section {
-    background: var(--darker-bg);
-}
-
-.about-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
-}
-
-.about-text {
-    padding-right: 2rem;
-}
-
-.about-description {
-    color: var(--text-light);
-    line-height: 1.7;
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-}
-
-.about-image {
-    text-align: center;
-}
-
-.about-image img {
-    width: 100%;
-    max-width: 400px;
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow-medium);
 }
 
 /* Registration Section */
@@ -453,12 +360,6 @@ section {
     font-size: 1.1rem;
 }
 
-/* Section CTA */
-.section-cta {
-    text-align: center;
-    margin-top: 3rem;
-}
-
 /* Footer */
 .footer {
     background: var(--darker-bg);
@@ -497,21 +398,8 @@ section {
         padding: 0 1rem;
     }
     
-    .event-cards {
-        grid-template-columns: 1fr;
-    }
-    
     .benefit-cards {
         grid-template-columns: 1fr;
-    }
-    
-    .about-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-    
-    .about-text {
-        padding-right: 0;
     }
     
     .form-row {
@@ -520,6 +408,10 @@ section {
     }
     
     .registration-form {
+        padding: 2rem 1.5rem;
+    }
+    
+    .invitation-content {
         padding: 2rem 1.5rem;
     }
     
@@ -552,6 +444,10 @@ section {
     }
     
     .registration-form {
+        padding: 1.5rem 1rem;
+    }
+    
+    .invitation-content {
         padding: 1.5rem 1rem;
     }
 }
@@ -603,15 +499,8 @@ section {
     }
 }
 
-.event-card,
-.benefit-card,
-.step-item {
+.benefit-card {
     animation: fadeInUp 0.6s ease-out;
-}
-
-/* Smooth scrolling for anchor links */
-html {
-    scroll-behavior: smooth;
 }
 
 /* Focus styles for accessibility */
@@ -621,6 +510,11 @@ html {
 .form-group select:focus {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
+}
+
+/* Navbar scroll effect */
+.navbar {
+    transition: var(--transition);
 }
 
 /* Print styles */
