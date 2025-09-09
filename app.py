@@ -691,6 +691,12 @@ def update_config():
                 if key_to_category_map.get(config_key) in categories_to_update:
                     update_config_value(config_key, value)
         
+        # Special handling for checkboxes that might not be present when unchecked
+        if active_tab == 'content':
+            # Handle not_planned_mode checkbox - if not present, set to '0'
+            if 'config_not_planned_mode' not in request.form:
+                update_config_value('not_planned_mode', '0')
+        
         flash('Configuratie succesvol bijgewerkt!', 'success')
     except Exception as e:
         logger.error(f"Error updating config: {e}")
