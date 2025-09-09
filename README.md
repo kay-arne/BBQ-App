@@ -126,6 +126,25 @@ ports:
 - **Secure SMTP**: Use app passwords for email authentication
 - **Regular updates**: Keep dependencies updated
 - **Backup data**: Regular backups of the database and uploads
+- **Security audit**: Run `pip-audit` to check for vulnerabilities
+- **Dependency management**: Only necessary dependencies included
+
+### Security Features
+- ✅ SQL injection protection (parameterized queries)
+- ✅ CSRF protection on all forms
+- ✅ Input validation and sanitization
+- ✅ Secure file upload handling
+- ✅ Password hashing with Werkzeug
+- ✅ Session management with configurable lifetime
+- ✅ Non-root Docker container execution
+
+## Performance Features
+
+- 🚀 **Database Optimization**: Connection pooling, WAL mode, optimized indexes
+- ⚡ **Caching**: LRU cache for configuration, static file caching
+- 🔄 **Async Operations**: Non-blocking email processing
+- 📊 **Resource Management**: Efficient memory usage and connection handling
+- 🎯 **Production Ready**: Gunicorn WSGI server, health checks
 
 ## File Structure
 

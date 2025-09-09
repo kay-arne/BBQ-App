@@ -16,6 +16,9 @@ COPY requirements.txt .
 # Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Fix security vulnerabilities
+RUN pip install --upgrade setuptools>=78.1.1
+
 # Copy application files
 COPY . .
 

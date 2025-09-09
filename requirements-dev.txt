@@ -1,0 +1,13 @@
+# Development and Testing Dependencies
+-r requirements.txt
+
+# Security Auditing
+pip-audit==2.9.0
+
+# Performance Testing
+pytest==8.3.4
+pytest-benchmark==4.0.0
+
+# Code Quality
+bandit==1.7.5
+flake8==7.0.0
