@@ -226,27 +226,11 @@ section {
     padding: 4rem;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-heavy);
-    border: 2px solid var(--primary-color);
+    border: 2px solid rgba(255, 255, 255, 0.2);
     position: relative;
     overflow: hidden;
 }
 
-.invitation-content::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--primary-color));
-    background-size: 200% 100%;
-    animation: shimmer 3s ease-in-out infinite;
-}
-
-@keyframes shimmer {
-    0%, 100% { background-position: 200% 0; }
-    50% { background-position: -200% 0; }
-}
 
 .invitation-content h1,
 .invitation-content h2,
