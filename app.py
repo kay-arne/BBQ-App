@@ -728,13 +728,6 @@ def reset_style_config():
     return redirect(url_for('admin_config'))
 
 # Admin user management routes
-@app.route('/admin/users')
-@login_required
-def admin_users():
-    """Admin user management page"""
-    admins = get_all_admins()
-    return render_template('admin_users.html', admins=admins)
-
 @app.route('/admin/users/create', methods=['POST'])
 @login_required
 def create_admin_user():
