@@ -581,7 +581,7 @@ section {
 .admin-page {
     background: var(--darker-bg);
     min-height: 100vh;
-    padding-top: 80px; /* Account for fixed navbar */
+    padding-top: 2rem; /* Reduced from 80px to match bottom spacing */
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     line-height: 1.6;
     color: var(--text-color);
@@ -599,7 +599,6 @@ section {
     align-items: center;
     padding: 2rem 0;
     margin-bottom: 2rem;
-    border-bottom: 2px solid var(--border-color);
 }
 
 .admin-header h1 {
@@ -1079,7 +1078,6 @@ section {
     padding: 2.5rem;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-light);
-    border: 1px solid var(--border-color);
     margin-bottom: 2rem;
 }
 
