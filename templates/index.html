@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ get_config_value('app_title', 'BBQ EVENTOS') }}</title>
+    <title>{{ get_config_value('app_title', '{{ get_config_value('app_title', 'BBQ EVENTOS') }}') }}</title>
     <meta name="description" content="Aanmelden voor het jaarlijkse tuinfeest en BBQ van de buurt">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
@@ -40,7 +40,7 @@
         <div class="nav-container">
             <div class="nav-logo">
                 <span class="flame-icon">🔥</span>
-                <span class="logo-text">BBQ EVENTOS</span>
+                <span class="logo-text">{{ get_config_value('app_title', 'BBQ EVENTOS') }}</span>
             </div>
         </div>
     </nav>
@@ -172,7 +172,7 @@
             <div class="footer-content">
                 <div class="footer-logo">
                     <span class="flame-icon">🔥</span>
-                    <span class="logo-text">BBQ EVENTOS</span>
+                    <span class="logo-text">{{ get_config_value('app_title', 'BBQ EVENTOS') }}</span>
                 </div>
                 <p class="footer-text">Ontwikkeld met ❤️ voor de buurt</p>
             </div>
