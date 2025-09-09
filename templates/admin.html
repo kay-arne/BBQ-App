@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBQ Admin Paneel</title>
+    <meta name="description" content="Beheer BBQ aanmeldingen en betalingen">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Dynamic color customization -->
+    <style>
+        :root {
+            --primary-color: {{ get_config_value('primary_color', '#e74c3c') }};
+            --secondary-color: {{ get_config_value('secondary_color', '#f39c12') }};
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="admin-header">
+            <h1>📊 BBQ Aanmeldingen Beheer</h1>
+            <div class="admin-nav">
+                <a href="{{ url_for('admin_config') }}" class="btn btn-secondary">⚙️ Configuratie</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-secondary">🚪 Uitloggen</a>
+            </div>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flash-messages">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Statistics Cards -->
+        <div class="admin-stats">
+            <div class="stat-card">
+                <span class="stat-number">{{ total_persons }}</span>
+                <span class="stat-label">👥 Totaal Personen</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ total_adults }}</span>
+                <span class="stat-label">👨‍👩‍👧‍👦 Volwassenen</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">{{ total_children }}</span>
+                <span class="stat-label">👶 Kinderen</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">€{{ "%.2f"|format(total_due_amount) }}</span>
+                <span class="stat-label">💰 Totaal Verschuldigd</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">€{{ "%.2f"|format(total_paid_amount) }}</span>
+                <span class="stat-label">✅ Totaal Betaald</span>
+            </div>
+        </div>
+
+        <h2>📋 Alle Aanmeldingen</h2>
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>👤 Naam</th>
+                        <th>🏠 Huisnr.</th>
+                        <th>👨‍👩‍👧‍👦 Volw.</th>
+                        <th>👶 Kind.</th>
+                        <th>💰 Verschuldigd</th>
+                        <th>✅ Betaald</th>
+                        <th>📝 Opmerkingen</th>
+                        <th>📊 Status</th>
+                        <th>⚙️ Acties</th>
+                    </tr>
+                </thead>
+            <tbody>
+                {% for reg in registrations %}
+                <tr>
+                    <td><span class="clickable-name" data-id="{{ reg.id }}">{{ reg.name }}</span></td>
+                    <td>{{ reg.house_number }}</td>
+                    <td>{{ reg.persons_adults }}</td>
+                    <td>{{ reg.persons_children }}</td>
+                    <td>€{{ "%.2f"|format(reg.total_amount) }}</td>
+                    <td>€{{ "%.2f"|format(reg.paid_amount) }}</td>
+                    <td style="max-width: 250px; overflow-wrap: break-word;">{{ reg.allergies_notes if reg.allergies_notes else 'Geen' }}</td>
+                    <td class="status-{{ reg.payment_status }}">
+                        {{ reg.payment_status.capitalize() }}
+                    </td>
+                    <td>
+                        <form action="{{ url_for('update_registration_status', reg_id=reg.id) }}" method="POST" class="status-form">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <select name="status" onchange="this.form.submit()">
+                                <option value="pending" {% if reg.payment_status == 'pending' %}selected{% endif %}>Pending</option>
+                                <option value="paid" {% if reg.payment_status == 'paid' %}selected{% endif %}>Betaald</option>
+                                <option value="cancelled" {% if reg.payment_status == 'cancelled' %}selected{% endif %}>Geannuleerd</option>
+                            </select>
+                        </form>
+                        <form action="{{ url_for('delete_registration', reg_id=reg.id) }}" method="POST" class="delete-form" style="margin-top: 5px;">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                            <button type="submit" onclick="return confirm('Weet je zeker dat je deze aanmelding wilt verwijderen?');">Verwijder</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="9">Nog geen aanmeldingen.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2">Totalen:</td>
+                    <td>{{ total_adults }} volw.</td>
+                    <td>{{ total_children }} kind.</td>
+                    <td>€{{ "%.2f"|format(total_due_amount) }}</td>
+                    <td>€{{ "%.2f"|format(total_paid_amount) }}</td>
+                    <td colspan="3"></td>
+                </tr>
+            </tfoot>
+        </table>
+        </div>
+
+        <!-- Manual Registration Form -->
+        <div class="form-section">
+            <h2>➕ Handmatig Aanmelding Toevoegen</h2>
+            <form action="{{ url_for('add_registration') }}" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <div class="form-group">
+                    <label for="add_name">👤 Naam *</label>
+                    <input type="text" id="add_name" name="name" required placeholder="Volledige naam">
+                </div>
+
+                <div class="form-group">
+                    <label for="add_email">📧 E-mailadres (optioneel)</label>
+                    <input type="email" id="add_email" name="email" placeholder="email@voorbeeld.nl">
+                </div>
+
+                <div class="form-group-inline">
+                    <div class="input-inline">
+                        <label for="add_house_number">🏠 Huisnummer</label>
+                        <input 
+                            type="text" 
+                            id="add_house_number" 
+                            name="house_number" 
+                            pattern="^\d+[a-zA-Z]?$" 
+                            title="Voer enkel cijfers en optioneel één letter (bijv. 46 of 46a) in.">
+                    </div>
+                    <div class="input-inline">
+                        <label for="add_persons_adults">👨‍👩‍👧‍👦 Volwassenen *</label>
+                        <input type="number" id="add_persons_adults" name="persons_adults" min="1" value="1" required>
+                    </div>
+                    <div class="input-inline">
+                        <label for="add_persons_children">👶 Kinderen</label>
+                        <input type="number" id="add_persons_children" name="persons_children" min="0" value="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="add_allergies_notes">⚠️ Voedselallergieën of opmerkingen (optioneel)</label>
+                    <textarea id="add_allergies_notes" name="allergies_notes" rows="3"></textarea>
+                </div>
+
+                <div class="form-group-inline">
+                    <div class="input-inline">
+                        <label for="add_total_amount">💰 Totaal bedrag (€) *</label>
+                        <input type="number" id="add_total_amount" name="total_amount" step="0.01" value="{{ '%.2f'|format(bbq_details.price_per_adult) }}" required>
+                    </div>
+                    <div class="input-inline">
+                        <label for="add_payment_status">📊 Initiële Status</label>
+                        <select id="add_payment_status" name="payment_status">
+                            <option value="pending">Pending</option>
+                            <option value="paid">Betaald (Contant)</option>
+                            <option value="cancelled">Geannuleerd</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="add_bunq_me_url">🔗 Bunq.me Link (optioneel)</label>
+                    <input type="text" id="add_bunq_me_url" name="bunq_me_url" placeholder="bijv. https://bunq.me/link/bedrag/omschrijving">
+                </div>
+
+                <button type="submit" class="btn btn-success">➕ Aanmelding Toevoegen</button>
+            </form>
+        </div>
+
+    </div>
+
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Details Aanmelding <span id="detailName"></span></h2>
+            <div class="modal-details">
+                <p><strong>ID:</strong> <span id="detailId"></span></p>
+                <p><strong>Naam:</strong> <span id="detailNameFull"></span></p>
+                <p><strong>Adres:</strong> Kamperweg <span id="detailAddress"></span></p>
+                <p><strong>E-mail:</strong> <span id="detailEmail"></span></p>
+                <p><strong>Volwassenen:</strong> <span id="detailAdults"></span></p>
+                <p><strong>Kinderen:</strong> <span id="detailChildren"></span></p>
+                <p><strong>Voedselallergieën/Opmerkingen:</strong> <span id="detailAllergies"></span></p>
+                <p><strong>Totaal verschuldigd:</strong> €<span id="detailTotalAmount"></span></p>
+                <p><strong>Betaald bedrag:</strong> €<span id="detailPaidAmount"></span></p>
+                <p><strong>Betaallink:</strong> <span id="detailBunqLink"></span></p>
+                <p><strong>Status:</strong> <span id="detailStatus"></span></p>
+                <p><strong>Aangemeld op:</strong> <span id="detailRegisteredAt"></span></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript voor de modal
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById('detailsModal');
+            const closeButton = document.querySelector('.close-button');
+            const clickableNames = document.querySelectorAll('.clickable-name');
+
+            closeButton.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+
+            window.addEventListener('click', (event) => {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            clickableNames.forEach(nameSpan => {
+                nameSpan.addEventListener('click', async (event) => {
+                    const regId = event.target.dataset.id;
+                    try {
+                        const response = await fetch(`/api/registration/${regId}`);
+                        const data = await response.json();
+
+                        if (response.ok) {
+                            document.getElementById('detailId').textContent = data.id;
+                            document.getElementById('detailName').textContent = data.name;
+                            document.getElementById('detailNameFull').textContent = data.name;
+                            document.getElementById('detailAddress').textContent = data.house_number;
+                            document.getElementById('detailEmail').textContent = data.email || 'N.V.T.';
+                            document.getElementById('detailAdults').textContent = data.persons_adults;
+                            document.getElementById('detailChildren').textContent = data.persons_children;
+                            document.getElementById('detailAllergies').textContent = data.allergies_notes || 'Geen';
+                            document.getElementById('detailTotalAmount').textContent = parseFloat(data.total_amount).toFixed(2);
+                            document.getElementById('detailPaidAmount').textContent = parseFloat(data.paid_amount).toFixed(2);
+                            
+                            const bunqLinkElement = document.getElementById('detailBunqLink');
+                            if (data.bunq_me_url) {
+                                bunqLinkElement.innerHTML = `<a href="${data.bunq_me_url}" target="_blank">${data.bunq_me_url}</a>`;
+                            } else {
+                                bunqLinkElement.textContent = 'N.V.T.';
+                            }
+
+                            document.getElementById('detailStatus').textContent = data.payment_status.charAt(0).toUpperCase() + data.payment_status.slice(1);
+                            document.getElementById('detailRegisteredAt').textContent = data.registered_at;
+
+                            modal.style.display = 'flex';
+                        } else {
+                            alert(data.message || 'Fout bij ophalen details.');
+                        }
+                    } catch (error) {
+                        console.error('Fout bij ophalen registratie details:', error);
+                        alert('Er is een fout opgetreden bij het laden van de details.');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

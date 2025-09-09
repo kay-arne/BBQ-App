@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ get_config_value('app_title', 'Aanmelden Buurt BBQ 2025') }}</title>
+    <meta name="description" content="Aanmelden voor het jaarlijkse tuinfeest en BBQ van de Kamperweg buurt">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Dynamic color customization -->
+    <style>
+        :root {
+            --primary-color: {{ get_config_value('primary_color', '#e74c3c') }};
+            --secondary-color: {{ get_config_value('secondary_color', '#f39c12') }};
+        }
+        
+        {% if get_config_value('background_image') %}
+        body {
+            background-image: url('{{ url_for('static', filename=get_config_value('background_image')) }}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+        {% endif %}
+    </style>
+</head>
+<body>
+    <div class="container container-form">
+        <h1>🔥 {{ get_config_value('app_title', 'Tuinfeest en BBQ 2025') }}</h1>
+        
+        <div class="card">
+            {{ render_main_content() }}
+        </div>
+        <div class="card">
+            <h2>📝 Aanmeldformulier</h2>
+            <form id="bbqForm">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                
+                <div class="form-group">
+                    <label for="name">👤 Volledige naam *</label>
+                    <input type="text" id="name" name="name" required placeholder="Uw volledige naam">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">📧 E-mailadres (optioneel)</label>
+                    <input type="email" id="email" name="email" placeholder="uw.email@voorbeeld.nl">
+                    <small>Voor bevestiging van uw aanmelding</small>
+                </div>
+
+                <div class="form-group-inline">
+                    <div class="input-inline">
+                        <label for="houseNumber">🏠 Huisnummer *</label>
+                        <input 
+                            type="text" 
+                            id="houseNumber" 
+                            name="houseNumber" 
+                            required 
+                            pattern="^\d+[a-zA-Z]?$" 
+                            title="Voer enkel cijfers en optioneel één letter (bijv. 46 of 46a) in."
+                            placeholder="Voer uw huisnummer in">
+                    </div>
+                    <div class="input-inline">
+                        <label for="personsAdults">👨‍👩‍👧‍👦 Volwassenen *</label>
+                        <input type="number" id="personsAdults" name="personsAdults" min="1" value="1" required>
+                    </div>
+                    <div class="input-inline">
+                        <label for="personsChildren">👶 Kinderen</label>
+                        <input type="number" id="personsChildren" name="personsChildren" min="0" value="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="allergiesNotes">⚠️ Voedselallergieën of opmerkingen</label>
+                    <textarea id="allergiesNotes" name="allergiesNotes" rows="3" placeholder="Heeft u of uw kinderen voedselallergieën? Of andere opmerkingen?"></textarea>
+                </div>
+
+                <div class="total-info">
+                    <p>💰 De kosten bedragen €{{ "%.2f"|format(bbq_details.price_per_adult) }} per volwassene</p>
+                    <p>💳 Totaal te betalen: <span id="totalAmount">€{{ "%.2f"|format(bbq_details.price_per_adult) }}</span></p>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    <span>🚀 Aanmelden en Betalen</span>
+                    <span class="spinner" style="display: none;"></span>
+                </button>
+            </form>
+            <div id="message" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        const pricePerAdult = {{ bbq_details.price_per_adult }};
+    </script>
+</body>
+</html>

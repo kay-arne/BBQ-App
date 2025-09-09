@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuratie - BBQ Admin</title>
+    <meta name="description" content="Beheer applicatie configuratie">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Dynamic color customization -->
+    <style>
+        :root {
+            --primary-color: {{ get_config_value('primary_color', '#e74c3c') }};
+            --secondary-color: {{ get_config_value('secondary_color', '#f39c12') }};
+        }
+    </style>
+    <!-- Simple Custom Editor - No external API needed -->
+</head>
+<body>
+    <div class="container">
+        <div class="admin-header">
+            <h1>⚙️ Configuratie</h1>
+            <div class="admin-nav">
+                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">📊 Dashboard</a>
+                <a href="{{ url_for('logout') }}" class="btn btn-secondary">🚪 Uitloggen</a>
+            </div>
+        </div>
+
+        <!-- Configuration Tabs -->
+        <div class="config-tabs">
+            <button class="tab-button active" onclick="showTab('variables')">📊 Variabelen</button>
+            <button class="tab-button" onclick="showTab('content')">📝 Content</button>
+            <button class="tab-button" onclick="showTab('style')">🎨 Stijl</button>
+            <button class="tab-button" onclick="showTab('email')">📧 E-Mail</button>
+            <button class="tab-button" onclick="showTab('users')">👥 Gebruikers</button>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flash-messages">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        <form action="{{ url_for('update_config') }}" method="POST" enctype="multipart/form-data" id="configForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="active_tab" id="active_tab_input" value="variables">
+            
+            <!-- Variables Tab -->
+            <div id="variables-tab" class="tab-content active">
+                <div class="card">
+                    <h2>📊 Variabelen</h2>
+                    <p class="tab-description">Deze variabelen worden automatisch vervangen in de hoofdinhoud van de pagina. Ze zorgen ervoor dat de informatie altijd actueel is.</p>
+                    
+                    <div class="variables-grid">
+                        {% for setting in configs.get('general', []) %}
+                            {% if setting.key == 'app_title' %}
+                            <div class="form-group">
+                                <label for="config_{{ setting.key }}">{{ setting.description }}</label>
+                                <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                                <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% for setting in configs.get('bbq', []) %}
+                        <div class="form-group">
+                            <label for="config_{{ setting.key }}">{{ setting.description }}</label>
+                            {% if setting.key == 'bbq_price_per_adult' %}
+                                <input type="number" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" step="0.01" placeholder="{{ setting.description }}">
+                            {% else %}
+                                <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                            {% endif %}
+                            <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="variable-info">
+                        <h3>🔍 Hoe variabelen werken</h3>
+                        <p>Deze variabelen kunnen gebruikt worden in de hoofdinhoud:</p>
+                        <ul>
+                            <li><code>{date}</code> - Wordt vervangen door de BBQ datum</li>
+                            <li><code>{location}</code> - Wordt vervangen door de locatie</li>
+                            <li><code>{price}</code> - Wordt vervangen door de prijs per volwassene</li>
+                            <li><code>{deadline}</code> - Wordt vervangen door de aanmelddeadline</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Tab -->
+            <div id="content-tab" class="tab-content">
+                <div class="card">
+                    <h2>📝 Content</h2>
+                    <p class="tab-description">Beheer de hoofdinhoud van de aanmeldpagina. Gebruik de knoppen om tekst te formatteren en variabelen in te voegen.</p>
+                    
+                    {% for setting in configs.get('content', []) %}
+                        {% if setting.key == 'main_content' %}
+                        <div class="form-group">
+                            <label for="config_{{ setting.key }}">{{ setting.description }}</label>
+                            <div class="simple-editor">
+                                <div class="editor-toolbar">
+                                    <button type="button" class="btn-toolbar" onclick="formatText('bold')" title="Vet">B</button>
+                                    <button type="button" class="btn-toolbar" onclick="formatText('italic')" title="Cursief">I</button>
+                                    <button type="button" class="btn-toolbar" onclick="formatText('underline')" title="Onderstrepen">U</button>
+                                    <span class="toolbar-separator">|</span>
+                                    <button type="button" class="btn-toolbar btn-variable" onclick="insertVariable('{date}')" title="Datum">📅 Datum</button>
+                                    <button type="button" class="btn-toolbar btn-variable" onclick="insertVariable('{location}')" title="Locatie">📍 Locatie</button>
+                                    <button type="button" class="btn-toolbar btn-variable" onclick="insertVariable('{price}')" title="Prijs">💰 Prijs</button>
+                                    <button type="button" class="btn-toolbar btn-variable" onclick="insertVariable('{deadline}')" title="Deadline">⏰ Deadline</button>
+                                </div>
+                                <textarea id="config_{{ setting.key }}" name="config_{{ setting.key }}" rows="12" placeholder="{{ setting.description }}">{{ setting.value or '' }}</textarea>
+                                <small><strong>Tip:</strong> Gebruik de knoppen hierboven om tekst te formatteren en variabelen in te voegen. De variabelen worden automatisch vervangen door de juiste waarden.</small>
+                            </div>
+                            <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Style Tab -->
+            <div id="style-tab" class="tab-content">
+                <div class="card">
+                    <h2>🎨 Stijl</h2>
+                    <p class="tab-description">Pas de kleuren en achtergrond van de applicatie aan om het aan te passen aan uw huisstijl.</p>
+                    
+                    <!-- Background Image Upload -->
+                    <div class="form-group">
+                        <label for="background_image">🖼️ Achtergrond Afbeelding</label>
+                        <div class="file-upload-container">
+                            <input type="file" id="background_image" name="background_image" accept="image/*" onchange="previewImage(this)">
+                            <div class="file-upload-preview" id="imagePreview" style="display: none;">
+                                <img id="previewImg" src="" alt="Preview">
+                                <button type="button" onclick="removeImage()" class="btn btn-small btn-danger">🗑️ Verwijder</button>
+                            </div>
+                            <div class="current-image" id="currentImage" style="display: none;">
+                                <p>Huidige achtergrond:</p>
+                                <img id="currentImg" src="" alt="Current background">
+                            </div>
+                        </div>
+                        <small>Upload een nieuwe achtergrond afbeelding (JPG, PNG, GIF). Maximaal 5MB.</small>
+                    </div>
+                    
+                    <div class="style-settings-grid">
+                        {% for setting in configs.get('appearance', []) %}
+                        <div class="form-group">
+                            <label for="config_{{ setting.key }}">{{ setting.description }}</label>
+                            {% if setting.key in ['primary_color', 'secondary_color'] %}
+                                <input type="color" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '#e74c3c' }}">
+                            {% else %}
+                                <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                            {% endif %}
+                            <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Style-specific actions -->
+                    <div class="style-actions">
+                        <button type="button" onclick="resetStyleToDefaults()" class="btn btn-warning">🔄 Reset Stijl naar Standaard</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Email Tab -->
+            <div id="email-tab" class="tab-content">
+                <div class="card">
+                    <h2>📧 E-Mail</h2>
+                    <p class="tab-description">Configureer de e-mail instellingen voor het versturen van bevestigingen en notificaties.</p>
+                    
+                    <div class="email-grid">
+                        {% for setting in configs.get('email', []) %}
+                        <div class="form-group">
+                            <label for="config_{{ setting.key }}">{{ setting.description }}</label>
+                            {% if setting.key == 'smtp_password' %}
+                                <input type="password" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                            {% elif setting.key == 'smtp_port' %}
+                                <input type="number" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                            {% else %}
+                                <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                            {% endif %}
+                            <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Users Tab -->
+            <div id="users-tab" class="tab-content">
+                <div class="card">
+                    <h2>👥 Gebruikersbeheer</h2>
+                    <p class="tab-description">Beheer admin gebruikers die toegang hebben tot het beheerpaneel. U kunt nieuwe gebruikers aanmaken, wachtwoorden bijwerken en gebruikers verwijderen.</p>
+                    
+                    <!-- Create New Admin User -->
+                    <div class="user-section">
+                        <h3>➕ Nieuwe Admin Gebruiker</h3>
+                        <div id="userForm">
+                            <div class="form-group-inline">
+                                <div class="input-inline">
+                                    <label for="username">👤 Gebruikersnaam *</label>
+                                    <input type="text" id="username" required placeholder="Gebruikersnaam">
+                                </div>
+                                <div class="input-inline">
+                                    <label for="email">📧 E-mailadres</label>
+                                    <input type="email" id="email" placeholder="email@voorbeeld.nl">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="password">🔒 Wachtwoord *</label>
+                                <input type="password" id="password" required placeholder="Wachtwoord">
+                            </div>
+                            
+                            <button type="button" onclick="createUser()" class="btn btn-success">➕ Admin Gebruiker Aanmaken</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Existing Admin Users -->
+                    <div class="user-section">
+                        <h3>👥 Bestaande Admin Gebruikers</h3>
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>👤 Gebruikersnaam</th>
+                                        <th>📧 E-mail</th>
+                                        <th>📅 Aangemaakt</th>
+                                        <th>✅ Status</th>
+                                        <th>⚙️ Acties</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for admin in admins %}
+                                    <tr>
+                                        <td>{{ admin.username }}</td>
+                                        <td>{{ admin.email or 'Niet ingesteld' }}</td>
+                                        <td>{{ admin.created_at }}</td>
+                                        <td class="status-{{ 'active' if admin.is_active else 'inactive' }}">
+                                            {{ 'Actief' if admin.is_active else 'Inactief' }}
+                                        </td>
+                                        <td>
+                                            {% if admin.is_active %}
+                                            <div class="admin-actions">
+                                                <button onclick="showPasswordModal({{ admin.id }}, '{{ admin.username }}')" class="btn btn-small btn-warning">🔑 Wachtwoord</button>
+                                                {% if admins|length > 1 %}
+                                                <form action="{{ url_for('delete_admin_user', admin_id=admin.id) }}" method="POST" style="display: inline;">
+                                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                                    <button type="submit" onclick="return confirm('Weet je zeker dat je deze admin gebruiker wilt verwijderen?')" class="btn btn-small btn-danger">🗑️ Verwijder</button>
+                                                </form>
+                                                {% endif %}
+                                            </div>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% else %}
+                                    <tr>
+                                        <td colspan="5">Geen admin gebruikers gevonden.</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <button type="submit" class="btn btn-primary btn-full" onclick="handleFormSubmit(); return false;">💾 Configuratie Opslaan</button>
+            </div>
+        </form>
+        
+        <!-- Separate form for user management -->
+        <form action="{{ url_for('create_admin_user') }}" method="POST" id="createUserForm" style="display: none;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <input type="hidden" name="username" id="hidden_username">
+            <input type="hidden" name="email" id="hidden_email">
+            <input type="hidden" name="password" id="hidden_password">
+        </form>
+    </div>
+
+    <!-- Password Update Modal -->
+    <div id="passwordModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closePasswordModal()">&times;</span>
+            <h2>🔑 Wachtwoord Bijwerken</h2>
+            <form id="passwordForm" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                
+                <div class="form-group">
+                    <label for="new_password">🔒 Nieuw Wachtwoord *</label>
+                    <input type="password" id="new_password" name="new_password" required placeholder="Nieuw wachtwoord">
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirm_password">🔒 Bevestig Wachtwoord *</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required placeholder="Bevestig wachtwoord">
+                </div>
+                
+                <button type="submit" class="btn btn-primary">💾 Wachtwoord Bijwerken</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Tab functionality
+        function showTab(tabName) {
+            // Update the hidden input with the current tab name
+            document.getElementById('active_tab_input').value = tabName;
+
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + '-tab').classList.add('active');
+            
+            // Add active class to clicked button
+            event.target.classList.add('active');
+        }
+        
+        // On page load, check for a hash in the URL and show the correct tab
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash.substring(1);
+            if (hash) {
+                const tabButton = document.querySelector(`.tab-button[onclick="showTab('${hash}')"]`);
+                if (tabButton) {
+                    tabButton.click();
+                }
+            }
+        });
+
+        // Simple Custom Editor Functions
+        function formatText(command) {
+            const textarea = document.getElementById('config_main_content');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const selectedText = textarea.value.substring(start, end);
+            
+            let formattedText = '';
+            switch(command) {
+                case 'bold':
+                    formattedText = `<strong>${selectedText}</strong>`;
+                    break;
+                case 'italic':
+                    formattedText = `<em>${selectedText}</em>`;
+                    break;
+                case 'underline':
+                    formattedText = `<u>${selectedText}</u>`;
+                    break;
+            }
+            
+            // Replace selected text with formatted text
+            textarea.value = textarea.value.substring(0, start) + formattedText + textarea.value.substring(end);
+            
+            // Set cursor position after the formatted text
+            const newPosition = start + formattedText.length;
+            textarea.setSelectionRange(newPosition, newPosition);
+            textarea.focus();
+        }
+        
+        function insertVariable(variable) {
+            const textarea = document.getElementById('config_main_content');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            
+            // Insert variable at cursor position
+            textarea.value = textarea.value.substring(0, start) + variable + textarea.value.substring(end);
+            
+            // Set cursor position after the variable
+            const newPosition = start + variable.length;
+            textarea.setSelectionRange(newPosition, newPosition);
+            textarea.focus();
+        }
+        
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                const textarea = document.getElementById('config_main_content');
+                if (document.activeElement === textarea) {
+                    switch(e.key) {
+                        case 'b':
+                            e.preventDefault();
+                            formatText('bold');
+                            break;
+                        case 'i':
+                            e.preventDefault();
+                            formatText('italic');
+                            break;
+                        case 'u':
+                            e.preventDefault();
+                            formatText('underline');
+                            break;
+                    }
+                }
+            }
+        });
+        
+        // Password Modal Functions
+        function showPasswordModal(adminId, username) {
+            document.getElementById('passwordForm').action = `/admin/users/update_password/${adminId}`;
+            document.querySelector('#passwordModal h2').textContent = `🔑 Wachtwoord Bijwerken - ${username}`;
+            document.getElementById('passwordModal').style.display = 'flex';
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            document.getElementById('passwordForm').reset();
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('passwordModal');
+            if (event.target == modal) {
+                closePasswordModal();
+            }
+        }
+
+        // Password confirmation validation
+        document.getElementById('passwordForm').addEventListener('submit', function(e) {
+            const password = document.getElementById('new_password').value;
+            const confirmPassword = document.getElementById('confirm_password').value;
+            
+            if (password !== confirmPassword) {
+                e.preventDefault();
+                alert('Wachtwoorden komen niet overeen!');
+            }
+        });
+
+        // Image upload preview functionality
+        function previewImage(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    const previewImg = document.getElementById('previewImg');
+                    previewImg.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeImage() {
+            const input = document.getElementById('background_image');
+            const preview = document.getElementById('imagePreview');
+            input.value = '';
+            preview.style.display = 'none';
+        }
+
+        // Reset style to defaults functionality
+        function resetStyleToDefaults() {
+            if (confirm('Weet je zeker dat je de stijl instellingen wilt resetten naar de standaardwaarden? Dit kan niet ongedaan worden gemaakt.')) {
+                // Create a form to submit reset request
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ url_for("reset_style_config") }}';
+                
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = 'csrf_token';
+                csrfToken.value = '{{ csrf_token() }}';
+                form.appendChild(csrfToken);
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+
+        // Form submission handler
+        function handleFormSubmit() {
+            const configForm = document.getElementById('configForm');
+            if (configForm) {
+                // Show loading state
+                const submitBtn = configForm.querySelector('button[type="submit"]');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = '💾 Opslaan...';
+                }
+                
+                // Submit the form
+                configForm.submit();
+            }
+        }
+
+        // Create user function
+        function createUser() {
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                alert('Gebruikersnaam en wachtwoord zijn verplicht.');
+                return;
+            }
+
+            // Populate hidden form
+            document.getElementById('hidden_username').value = username;
+            document.getElementById('hidden_email').value = email;
+            document.getElementById('hidden_password').value = password;
+
+            // Submit the hidden form
+            document.getElementById('createUserForm').submit();
+        }
+    </script>
+</body>
+</html>

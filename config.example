@@ -1,0 +1,36 @@
+# BBQ App Environment Configuration
+# Copy this file to .env and fill in your actual values
+# IMPORTANT: Never commit .env to version control!
+
+# Flask Configuration
+SECRET_KEY=your_very_secure_secret_key_here_change_this_in_production
+FLASK_ENV=development
+FLASK_DEBUG=True
+
+# Database Configuration
+DATABASE_PATH=bbq.db
+
+# Email Configuration (SMTP)
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USERNAME=your_email@gmail.com
+SMTP_PASSWORD=your_app_password_here
+ORGANIZER_EMAIL=organizer@example.com
+
+# Admin Configuration
+ADMIN_PASSWORD=change_this_strong_password
+
+# BBQ Event Configuration
+BBQ_PRICE_PER_ADULT=28.50
+BBQ_DATE=zaterdag 6 september
+BBQ_LOCATION=familie Smit aan de Kamperweg 46
+BBQ_DEADLINE=22 augustus
+BBQ_CONTACT_PHONE=06-83699549
+
+# Bunq.me Configuration
+BUNQ_ME_BASE_URL=https://bunq.me/kamperwegBBQ
+
+# Security Configuration
+SESSION_LIFETIME=1800
+
+

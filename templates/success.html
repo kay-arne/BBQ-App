@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎉 Aanmelding Gelukt! - BBQ 2025</title>
+    <meta name="description" content="Uw aanmelding voor de BBQ is succesvol ontvangen">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Dynamic color customization -->
+    <style>
+        :root {
+            --primary-color: {{ get_config_value('primary_color', '#e74c3c') }};
+            --secondary-color: {{ get_config_value('secondary_color', '#f39c12') }};
+        }
+    </style>
+</head>
+<body>
+    <div class="container container-form">
+        <div class="card">
+            <h1>🎉 Aanmelding Gelukt!</h1>
+            <div class="message success">
+                <span>✅</span>
+                <div>
+                    <p><strong>Dank voor je aanmelding!</strong></p>
+                    <p>Je betaling is succesvol ontvangen (of wordt verwerkt). Je ontvangt een bevestiging via e-mail.</p>
+                    <p>We zien je graag op de BBQ!</p>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="/" class="btn btn-primary">🏠 Terug naar aanmeldpagina</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
