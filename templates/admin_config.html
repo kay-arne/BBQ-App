@@ -124,16 +124,31 @@
                             <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
                         </div>
                         {% endfor %}
+                        
+                        {% for setting in configs.get('variables', []) %}
+                        <div class="form-group">
+                            <label for="config_{{ setting.key }}">{{ setting.description }}</label>
+                            {% if setting.key in ['price_per_adult', 'price_per_child'] %}
+                                <input type="number" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" step="0.01" placeholder="{{ setting.description }}">
+                            {% else %}
+                                <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                            {% endif %}
+                            <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                        </div>
+                        {% endfor %}
                     </div>
                     
                     <div class="variable-info">
                         <h3>🔍 Hoe variabelen werken</h3>
-                        <p>Deze variabelen kunnen gebruikt worden in de hoofdinhoud:</p>
+                        <p>Deze variabelen kunnen gebruikt worden in de hoofdinhoud en e-mails:</p>
                         <ul>
                             <li><code>{date}</code> - Wordt vervangen door de BBQ datum</li>
                             <li><code>{location}</code> - Wordt vervangen door de locatie</li>
                             <li><code>{price}</code> - Wordt vervangen door de prijs per volwassene</li>
+                            <li><code>{price_adult}</code> - Wordt vervangen door de prijs per volwassene</li>
+                            <li><code>{price_child}</code> - Wordt vervangen door de prijs per kind</li>
                             <li><code>{deadline}</code> - Wordt vervangen door de aanmelddeadline</li>
+                            <li><code>{contact_phone}</code> - Wordt vervangen door het contact telefoonnummer</li>
                         </ul>
                     </div>
                 </div>

@@ -65,11 +65,19 @@ def render_main_content():
     content = get_config('main_content', '')
     bbq_details = get_cached_bbq_details()
     
+    # Get additional variables from config
+    price_per_adult = get_config_value('price_per_adult', str(bbq_details['price_per_adult']))
+    price_per_child = get_config_value('price_per_child', '12')
+    contact_phone = get_config_value('bbq_contact_phone', bbq_details['contact_kay_phone'])
+    
     # Replace placeholders with actual values
     content = content.replace('{date}', bbq_details['date'])
     content = content.replace('{location}', bbq_details['location'])
-    content = content.replace('{price}', f"{bbq_details['price_per_adult']:.2f}")
+    content = content.replace('{price}', f"{float(price_per_adult):.2f}")
+    content = content.replace('{price_adult}', f"{float(price_per_adult):.2f}")
+    content = content.replace('{price_child}', f"{float(price_per_child):.2f}")
     content = content.replace('{deadline}', bbq_details['deadline'])
+    content = content.replace('{contact_phone}', contact_phone)
     
     # Return as safe HTML (Markup)
     return Markup(content)
@@ -832,6 +840,12 @@ def register_and_pay():
                         payment_info = f"<p>Het totaalbedrag is <strong>€{total_amount:.2f}</strong>.</p><p>{no_payment_message}</p>"
                         payment_status_text = "Uw aanmelding is succesvol ontvangen."
                     
+                    # Get all config values for email
+                    bbq_date = get_config_value('bbq_date', 'zaterdag 15 juni')
+                    bbq_location = get_config_value('bbq_location', 'het buurthuis')
+                    bbq_deadline = get_config_value('bbq_deadline', '10 juni')
+                    bbq_contact = get_config_value('bbq_contact_phone', '06-12345678')
+                    
                     body_user = f"""
                     <html>
                     <body>
@@ -840,8 +854,9 @@ def register_and_pay():
                         <p>Je hebt je aangemeld voor <strong>{persons_adults} volwassene(n)</strong> en <strong>{persons_children} kind(eren)</strong>.</p>
                         {payment_info}
                         <p>{payment_status_text}</p>
-                        <p>Datum BBQ: {get_config_value('date', 'zaterdag 15 juni')}. Locatie: {get_config_value('location', 'het buurthuis')}.</p>
-                        <p>Uiterste opgavedatum: {get_config_value('deadline', '10 juni')}.</p>
+                        <p>Datum BBQ: {bbq_date}. Locatie: {bbq_location}.</p>
+                        <p>Uiterste opgavedatum: {bbq_deadline}.</p>
+                        <p>Voor vragen kunt u contact opnemen via {bbq_contact}.</p>
                         <p>We kijken ernaar uit u te zien!</p>
                         <p>Met hartelijke groet,</p>
                         <p>Het organisatieteam</p>
@@ -1089,13 +1104,19 @@ def update_registration_status(reg_id):
                 if new_status == 'paid' and current_email:
                     bbq_details = get_cached_bbq_details()
                     subject_paid = "Bevestiging betaling Buurt BBQ verwerkt"
+                    # Get config values for payment confirmation email
+                    bbq_date = get_config_value('bbq_date', bbq_details["date"])
+                    bbq_location = get_config_value('bbq_location', 'het buurthuis')
+                    bbq_contact = get_config_value('bbq_contact_phone', '06-12345678')
+                    
                     body_paid = f"""
                     <html>
                     <body>
                         <p>Beste {current_name} (Huisnummer {current_reg['house_number']}),</p>
                         <p>Goed nieuws! Uw betaling van <strong>€{total_amount_for_reg:.2f}</strong> voor de Buurt BBQ is zojuist door de organisatie <strong>verwerkt en bevestigd</strong>.</p>
                         <p>U bent nu officieel aangemeld voor {current_reg['persons_adults']} volwassene(n) en {current_reg['persons_children']} kind(eren).</p>
-                        <p>Wij kijken ernaar uit u te zien op ons tuinfeest op <strong>{bbq_details["date"]}</strong>!</p>
+                        <p>Wij kijken ernaar uit u te zien op ons tuinfeest op <strong>{bbq_date}</strong> bij <strong>{bbq_location}</strong>!</p>
+                        <p>Voor vragen kunt u contact opnemen via {bbq_contact}.</p>
                         <p>Met vriendelijke groet,</p>
                         <p>Het organisatieteam</p>
                     </body>
