@@ -434,7 +434,7 @@
                                 <div class="form-group">
                                     <label for="config_{{ setting.key }}">{{ setting.description }}</label>
                                     {% if setting.key in ['primary_color', 'secondary_color'] %}
-                                        <input type="color" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '#e74c3c' }}">
+                                        <input type="color" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or (setting.key == 'primary_color' and '#FF8C00' or '#FF6B35') }}">
                                     {% else %}
                                         <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
                                     {% endif %}
@@ -813,6 +813,9 @@
                     const previewImg = document.getElementById('previewHeroImg');
                     previewImg.src = e.target.result;
                     preview.style.display = 'block';
+                    // Hide current image when previewing new one
+                    const currentImage = document.getElementById('currentHeroImage');
+                    currentImage.style.display = 'none';
                 };
                 reader.readAsDataURL(input.files[0]);
             }
@@ -823,7 +826,27 @@
             const preview = document.getElementById('heroImagePreview');
             input.value = '';
             preview.style.display = 'none';
+            // Show current image again
+            const currentImage = document.getElementById('currentHeroImage');
+            currentImage.style.display = 'block';
         }
+
+        // Show current hero image on page load
+        function showCurrentHeroImage() {
+            const currentImage = document.getElementById('currentHeroImage');
+            const currentImg = document.getElementById('currentHeroImg');
+            const heroImageValue = '{{ get_config_value("hero_image", "") }}';
+            
+            if (heroImageValue && heroImageValue !== '') {
+                currentImg.src = '/static/' + heroImageValue;
+                currentImage.style.display = 'block';
+            }
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            showCurrentHeroImage();
+        });
 
         // Reset style to defaults functionality
         function resetStyleToDefaults() {
