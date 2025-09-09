@@ -647,7 +647,9 @@ def update_config():
         tab_to_category_map = {
             'variables': ['general', 'bbq'],
             'content': ['content'],
+            'benefits': ['benefits'],
             'style': ['appearance'],
+            'payment': ['payment'],
             'email': ['email']
         }
 
