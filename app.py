@@ -369,7 +369,7 @@ def initialize_default_config():
     cleanup_old_config()
     
     defaults = {
-        'app_title': ('BBQ Aanmeldingen 2025', 'Titel van de applicatie', 'general'),
+        'app_title': ('BBQ-App', 'Titel van de applicatie', 'general'),
         'bbq_date': ('zaterdag 15 juni', 'Datum van de BBQ', 'bbq'),
         'bbq_location': ('het buurthuis', 'Locatie van de BBQ', 'bbq'),
         'bbq_deadline': ('10 juni', 'Deadline voor aanmelding', 'bbq'),
