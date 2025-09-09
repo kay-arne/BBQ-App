@@ -609,10 +609,15 @@
                                     <input type="password" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
                                 {% elif setting.key == 'smtp_port' %}
                                     <input type="number" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                                {% elif setting.key == 'organizer_email' %}
+                                    <input type="email" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="bijv. organizer@example.com">
+                                    <small>Dit e-mailadres ontvangt notificaties over nieuwe aanmeldingen</small>
                                 {% else %}
                                     <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
                                 {% endif %}
+                                {% if setting.key != 'organizer_email' %}
                                 <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                                {% endif %}
                             </div>
                             {% endfor %}
                         </div>

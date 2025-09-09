@@ -390,7 +390,7 @@ def initialize_default_config():
         'smtp_port': ('587', 'SMTP poort', 'email'),
         'smtp_username': ('', 'SMTP gebruikersnaam', 'email'),
         'smtp_password': ('', 'SMTP wachtwoord', 'email'),
-        'organizer_email': (get_config('organizer_email', ''), 'E-mailadres van de organisator', 'email'),
+        'organizer_email': ('', 'E-mailadres van de organisator', 'email'),
         'hero_image': ('bbq_achtergrond.png', 'Hero afbeelding', 'content'),
         'primary_color': ('#FF8C00', 'Primaire kleur van de applicatie', 'appearance'),
         'secondary_color': ('#FF6B35', 'Secundaire kleur van de applicatie', 'appearance'),
