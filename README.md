@@ -95,10 +95,6 @@ After first login, configure your event through the admin interface:
    ```bash
    export SECRET_KEY="your-very-secure-secret-key"
    export ADMIN_PASSWORD="your-secure-admin-password"
-   export SMTP_SERVER="your-smtp-server"
-   export SMTP_USERNAME="your-email"
-   export SMTP_PASSWORD="your-password"
-   export ORGANIZER_EMAIL="your-email"
    ```
 
 2. **Deploy with Docker Compose**
@@ -111,6 +107,11 @@ After first login, configure your event through the admin interface:
    docker-compose logs -f
    ```
 
+4. **Configure the application**
+   - Access the admin panel at `http://localhost:3000/admin`
+   - Login with your admin password
+   - Configure BBQ details, email settings, and other options through the admin interface
+
 ### Custom Port
 
 To run on a different port, modify `docker-compose.yml`:
@@ -119,13 +120,31 @@ ports:
   - "8080:3000"  # Change 8080 to your desired port
 ```
 
+### Database Persistence
+
+**IMPORTANT**: The application uses Docker volumes to persist data:
+
+- **`bbq_db`**: Contains the SQLite database (`bbq.db`) with all registrations and configuration
+- **`bbq_data`**: Contains uploaded images and static files
+
+These volumes ensure your data survives container restarts and updates. The database is automatically created on first run.
+
+**Backup your data**:
+```bash
+# Backup the database
+docker cp bbq-app_bbq-app_1:/app/bbq.db ./backup-bbq.db
+
+# Backup uploaded files
+docker cp bbq-app_bbq-app_1:/app/static/uploads ./backup-uploads
+```
+
 ## Security Considerations
 
 - **Change default passwords**: Always change the admin password
 - **Use HTTPS**: Set up SSL/TLS in production
-- **Secure SMTP**: Use app passwords for email authentication
+- **Secure email configuration**: Configure SMTP settings through the admin interface with app passwords
 - **Regular updates**: Keep dependencies updated
-- **Backup data**: Regular backups of the database and uploads
+- **Backup data**: Regular backups of the database and uploads (see Database Persistence section)
 - **Security audit**: Run `pip-audit` to check for vulnerabilities
 - **Dependency management**: Only necessary dependencies included
 

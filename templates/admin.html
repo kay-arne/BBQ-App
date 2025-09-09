@@ -33,6 +33,78 @@
             background: var(--card-bg);
             border: 1px solid var(--border-color);
         }
+        
+        /* Compact button styles for admin table */
+        .btn-small {
+            padding: 0.4rem 0.8rem !important;
+            font-size: 0.85rem !important;
+            font-weight: 600 !important;
+            border-radius: 6px !important;
+        }
+        
+        .btn-tiny {
+            padding: 0.25rem 0.5rem !important;
+            font-size: 0.75rem !important;
+            font-weight: 600 !important;
+            border-radius: 4px !important;
+            min-width: auto !important;
+            width: auto !important;
+        }
+        
+        /* Compact table styling */
+        .table-container table {
+            font-size: 0.9rem;
+        }
+        
+        .table-container th,
+        .table-container td {
+            padding: 0.5rem 0.75rem;
+        }
+        
+        /* Action buttons container */
+        .action-buttons {
+            min-width: 80px;
+        }
+        
+        /* Status dropdown styling */
+        .status-form select {
+            min-width: 90px;
+            cursor: pointer;
+        }
+        
+        .status-form select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        /* Checkbox styling */
+        .registration-checkbox {
+            transform: scale(1.1);
+            cursor: pointer;
+        }
+        
+        #selectAllCheckbox {
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+        
+        /* Responsive improvements */
+        @media (max-width: 768px) {
+            .bulk-actions {
+                flex-direction: column;
+                gap: 0.75rem;
+                align-items: stretch !important;
+            }
+            
+            .bulk-actions-left,
+            .bulk-actions-right {
+                justify-content: center;
+            }
+            
+            .table-container {
+                overflow-x: auto;
+            }
+        }
     </style>
 </head>
 <body class="admin-page">
@@ -80,10 +152,26 @@
         </div>
 
         <h2>📋 Alle Aanmeldingen</h2>
+        
+        <!-- Bulk Actions -->
+        <div class="bulk-actions" style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+            <div class="bulk-actions-left" style="display: flex; gap: 0.5rem; align-items: center;">
+                <button type="button" onclick="selectAll()" class="btn btn-secondary btn-small">✅ Alles</button>
+                <button type="button" onclick="deselectAll()" class="btn btn-secondary btn-small">❌ Geen</button>
+            </div>
+            <div class="bulk-actions-right" style="display: flex; gap: 0.75rem; align-items: center;">
+                <span id="selectedCount" style="color: var(--text-light); font-size: 0.9rem;">0 geselecteerd</span>
+                <button type="button" onclick="bulkDelete()" class="btn btn-danger btn-small" id="bulkDeleteBtn" disabled>🗑️ Verwijderen</button>
+            </div>
+        </div>
+        
         <div class="table-container">
             <table>
                 <thead>
                     <tr>
+                        <th style="width: 40px;">
+                            <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()">
+                        </th>
                         <th>👤 Naam</th>
                         <th>🏠 Huisnr.</th>
                         <th>👨‍👩‍👧‍👦 Volw.</th>
@@ -98,6 +186,9 @@
             <tbody>
                 {% for reg in registrations %}
                 <tr>
+                    <td>
+                        <input type="checkbox" class="registration-checkbox" value="{{ reg.id }}" onchange="updateBulkActions()">
+                    </td>
                     <td><span class="clickable-name" data-id="{{ reg.id }}">{{ reg.name }}</span></td>
                     <td>{{ reg.house_number }}</td>
                     <td>{{ reg.persons_adults }}</td>
@@ -109,29 +200,31 @@
                         {{ reg.payment_status.capitalize() }}
                     </td>
                     <td>
-                        <form action="{{ url_for('update_registration_status', reg_id=reg.id) }}" method="POST" class="status-form">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                            <select name="status" onchange="this.form.submit()">
-                                <option value="pending" {% if reg.payment_status == 'pending' %}selected{% endif %}>Pending</option>
-                                <option value="paid" {% if reg.payment_status == 'paid' %}selected{% endif %}>Betaald</option>
-                                <option value="cancelled" {% if reg.payment_status == 'cancelled' %}selected{% endif %}>Geannuleerd</option>
-                            </select>
-                        </form>
-                        <form action="{{ url_for('delete_registration', reg_id=reg.id) }}" method="POST" class="delete-form" style="margin-top: 5px;">
-                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Weet je zeker dat je deze aanmelding wilt verwijderen?');">Verwijder</button>
-                        </form>
+                        <div class="action-buttons" style="display: flex; flex-direction: column; gap: 0.25rem; align-items: flex-start;">
+                            <form action="{{ url_for('update_registration_status', reg_id=reg.id) }}" method="POST" class="status-form" style="margin: 0;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <select name="status" onchange="this.form.submit()" style="padding: 0.25rem 0.5rem; font-size: 0.8rem; border-radius: 4px; background: var(--darker-bg); border: 1px solid var(--border-color); color: var(--text-white);">
+                                    <option value="pending" {% if reg.payment_status == 'pending' %}selected{% endif %}>Pending</option>
+                                    <option value="paid" {% if reg.payment_status == 'paid' %}selected{% endif %}>Betaald</option>
+                                    <option value="cancelled" {% if reg.payment_status == 'cancelled' %}selected{% endif %}>Geannuleerd</option>
+                                </select>
+                            </form>
+                            <form action="{{ url_for('delete_registration', reg_id=reg.id) }}" method="POST" class="delete-form" style="margin: 0;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                                <button type="submit" class="btn btn-danger btn-tiny" onclick="return confirm('Weet je zeker dat je deze aanmelding wilt verwijderen?');">🗑️</button>
+                            </form>
+                        </div>
                     </td>
                 </tr>
                 {% else %}
                 <tr>
-                    <td colspan="9">Nog geen aanmeldingen.</td>
+                    <td colspan="10">Nog geen aanmeldingen.</td>
                 </tr>
                 {% endfor %}
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="2">Totalen:</td>
+                    <td colspan="3">Totalen:</td>
                     <td>{{ total_adults }} volw.</td>
                     <td>{{ total_children }} kind.</td>
                     <td>€{{ "%.2f"|format(total_due_amount) }}</td>
@@ -202,7 +295,7 @@
                     <input type="text" id="add_bunq_me_url" name="bunq_me_url" placeholder="bijv. https://bunq.me/link/bedrag/omschrijving">
                 </div>
 
-                <button type="submit" class="btn btn-primary">➕ Aanmelding Toevoegen</button>
+                <button type="submit" class="btn btn-primary btn-small">➕ Aanmelding Toevoegen</button>
             </form>
         </div>
 
@@ -286,6 +379,96 @@
                 });
             });
         });
+
+        // Bulk delete functionality
+        function updateBulkActions() {
+            const checkboxes = document.querySelectorAll('.registration-checkbox');
+            const selectedCheckboxes = document.querySelectorAll('.registration-checkbox:checked');
+            const bulkDeleteBtn = document.getElementById('bulkDeleteBtn');
+            const selectedCount = document.getElementById('selectedCount');
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+
+            // Update count
+            selectedCount.textContent = `${selectedCheckboxes.length} geselecteerd`;
+
+            // Enable/disable bulk delete button
+            bulkDeleteBtn.disabled = selectedCheckboxes.length === 0;
+
+            // Update select all checkbox state
+            if (selectedCheckboxes.length === 0) {
+                selectAllCheckbox.indeterminate = false;
+                selectAllCheckbox.checked = false;
+            } else if (selectedCheckboxes.length === checkboxes.length) {
+                selectAllCheckbox.indeterminate = false;
+                selectAllCheckbox.checked = true;
+            } else {
+                selectAllCheckbox.indeterminate = true;
+            }
+        }
+
+        function selectAll() {
+            const checkboxes = document.querySelectorAll('.registration-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            updateBulkActions();
+        }
+
+        function deselectAll() {
+            const checkboxes = document.querySelectorAll('.registration-checkbox');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateBulkActions();
+        }
+
+        function toggleSelectAll() {
+            const selectAllCheckbox = document.getElementById('selectAllCheckbox');
+            const checkboxes = document.querySelectorAll('.registration-checkbox');
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            updateBulkActions();
+        }
+
+        function bulkDelete() {
+            const selectedCheckboxes = document.querySelectorAll('.registration-checkbox:checked');
+            const selectedIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+            
+            if (selectedIds.length === 0) {
+                alert('Geen aanmeldingen geselecteerd.');
+                return;
+            }
+
+            const confirmMessage = `Weet je zeker dat je ${selectedIds.length} aanmelding(en) wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.`;
+            
+            if (confirm(confirmMessage)) {
+                // Create form and submit
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '{{ url_for("bulk_delete_registrations") }}';
+                
+                // Add CSRF token
+                const csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = 'csrf_token';
+                csrfToken.value = '{{ csrf_token() }}';
+                form.appendChild(csrfToken);
+                
+                // Add selected IDs
+                selectedIds.forEach(id => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'registration_ids';
+                    input.value = id;
+                    form.appendChild(input);
+                });
+                
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
     </script>
 </body>
 </html>

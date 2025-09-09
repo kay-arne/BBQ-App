@@ -812,7 +812,7 @@ def register_and_pay():
             payment_url = f"{bunq_me_link}/{total_amount:.2f}/{description.replace(' ', '%20')}"
         elif payment_method == 'none':
             payment_url = ""
-            payment_status = "no_payment_required"
+            payment_status = "pending"
 
         with db_pool.get_connection() as conn:
             try:
@@ -1148,6 +1148,47 @@ def delete_registration(reg_id):
             conn.rollback()
             flash(f"Fout bij verwijderen aanmelding: {e}", 'error')
             logger.error(f"Fout bij verwijderen aanmelding: {e}")
+
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/bulk_delete_registrations', methods=['POST'])
+@login_required
+def bulk_delete_registrations():
+    """Delete multiple registrations at once"""
+    registration_ids = request.form.getlist('registration_ids')
+    
+    if not registration_ids:
+        flash("Geen aanmeldingen geselecteerd voor verwijdering.", 'error')
+        return redirect(url_for('admin_dashboard'))
+    
+    # Convert to integers and validate
+    try:
+        reg_ids = [int(reg_id) for reg_id in registration_ids]
+    except ValueError:
+        flash("Ongeldige aanmelding ID's ontvangen.", 'error')
+        return redirect(url_for('admin_dashboard'))
+    
+    deleted_count = 0
+    with db_pool.get_connection() as conn:
+        try:
+            # Delete each registration
+            for reg_id in reg_ids:
+                cursor = conn.execute('DELETE FROM registrations WHERE id = ?', (reg_id,))
+                if cursor.rowcount > 0:
+                    deleted_count += 1
+            
+            conn.commit()
+            
+            if deleted_count > 0:
+                flash(f"{deleted_count} aanmelding(en) succesvol verwijderd.", 'success')
+                logger.info(f"Bulk deleted {deleted_count} registrations: {reg_ids}")
+            else:
+                flash("Geen aanmeldingen gevonden om te verwijderen.", 'info')
+                
+        except sqlite3.Error as e:
+            conn.rollback()
+            flash(f"Fout bij bulk verwijderen aanmeldingen: {e}", 'error')
+            logger.error(f"Fout bij bulk verwijderen aanmeldingen: {e}")
 
     return redirect(url_for('admin_dashboard'))
 

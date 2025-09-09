@@ -5,17 +5,10 @@
 # Flask Configuration (REQUIRED)
 SECRET_KEY=your_very_secure_secret_key_here_change_this_in_production
 
-# Email Configuration (OPTIONAL - for sending confirmation emails)
-SMTP_SERVER=
-SMTP_PORT=587
-SMTP_USERNAME=
-SMTP_PASSWORD=
-ORGANIZER_EMAIL=
-
 # Admin Configuration (REQUIRED)
 ADMIN_PASSWORD=change_this_strong_password
 
-# Note: All other configuration (BBQ details, prices, content, etc.) 
+# Note: All other configuration (BBQ details, prices, content, email settings, etc.) 
 # can be set through the admin interface after first login
 
 
