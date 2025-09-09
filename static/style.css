@@ -616,6 +616,12 @@ section {
     font-size: 1.1rem;
 }
 
+.admin-nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
 .admin-nav-right {
     display: flex;
     gap: 1.5rem;
@@ -1308,6 +1314,7 @@ section {
         text-align: center;
     }
     
+    .admin-nav,
     .admin-nav-right {
         justify-content: center;
     }
