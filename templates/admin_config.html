@@ -65,9 +65,9 @@
     <div class="admin-container">
         <div class="admin-header">
             <h1>⚙️ Configuratie</h1>
-            <div class="admin-nav">
-                <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">📊 Dashboard</a>
-                <a href="{{ url_for('logout') }}" class="btn btn-secondary">🚪 Uitloggen</a>
+            <div class="admin-nav-right">
+                <a href="{{ url_for('admin_dashboard') }}" class="nav-link">📊 Dashboard</a>
+                <a href="{{ url_for('logout') }}" class="nav-link">🚪 Uitloggen</a>
             </div>
         </div>
 
@@ -422,11 +422,12 @@
                     </div>
                 </div>
             </div>
-            
-            <div class="card">
-                <button type="submit" class="btn btn-primary btn-full" onclick="handleFormSubmit(); return false;">💾 Configuratie Opslaan</button>
-            </div>
         </form>
+        
+        <!-- Save Button - Centered -->
+        <div class="save-button-container">
+            <button type="submit" form="configForm" class="btn btn-primary btn-save" onclick="handleFormSubmit(); return false;">💾 Configuratie Opslaan</button>
+        </div>
         
         <!-- Separate form for user management -->
         <form action="{{ url_for('create_admin_user') }}" method="POST" id="createUserForm" style="display: none;">
