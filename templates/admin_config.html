@@ -75,6 +75,7 @@
         <div class="config-tabs">
             <button class="tab-button active" onclick="showTab('variables')">📊 Variabelen</button>
             <button class="tab-button" onclick="showTab('content')">📝 Content</button>
+            <button class="tab-button" onclick="showTab('benefits')">⭐ Voordelen</button>
             <button class="tab-button" onclick="showTab('style')">🎨 Stijl</button>
             <button class="tab-button" onclick="showTab('email')">📧 E-Mail</button>
             <button class="tab-button" onclick="showTab('users')">👥 Gebruikers</button>
@@ -182,6 +183,96 @@
                         </div>
                         {% endif %}
                     {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Benefits Tab -->
+            <div id="benefits-tab" class="tab-content">
+                <div class="card">
+                    <h2>⭐ Voordelen</h2>
+                    <p class="tab-description">Configureer de 4 voordelen die op de hoofdpagina worden getoond.</p>
+                    
+                    <div class="benefits-config">
+                        <!-- Benefit 1 -->
+                        <div class="benefit-config-section">
+                            <h3>🎯 Voordeel 1</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="config_benefit_1_icon">Icoon</label>
+                                    <input type="text" id="config_benefit_1_icon" name="config_benefit_1_icon" value="{{ get_config_value('benefit_1_icon', '🍖') }}" placeholder="Bijv. 🍖">
+                                    <small>Emoji of symbool voor dit voordeel</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="config_benefit_1_title">Titel</label>
+                                    <input type="text" id="config_benefit_1_title" name="config_benefit_1_title" value="{{ get_config_value('benefit_1_title', '') }}" placeholder="Titel van voordeel 1">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="config_benefit_1_description">Beschrijving</label>
+                                <textarea id="config_benefit_1_description" name="config_benefit_1_description" rows="2" placeholder="Beschrijving van voordeel 1">{{ get_config_value('benefit_1_description', '') }}</textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Benefit 2 -->
+                        <div class="benefit-config-section">
+                            <h3>🎯 Voordeel 2</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="config_benefit_2_icon">Icoon</label>
+                                    <input type="text" id="config_benefit_2_icon" name="config_benefit_2_icon" value="{{ get_config_value('benefit_2_icon', '👥') }}" placeholder="Bijv. 👥">
+                                    <small>Emoji of symbool voor dit voordeel</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="config_benefit_2_title">Titel</label>
+                                    <input type="text" id="config_benefit_2_title" name="config_benefit_2_title" value="{{ get_config_value('benefit_2_title', '') }}" placeholder="Titel van voordeel 2">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="config_benefit_2_description">Beschrijving</label>
+                                <textarea id="config_benefit_2_description" name="config_benefit_2_description" rows="2" placeholder="Beschrijving van voordeel 2">{{ get_config_value('benefit_2_description', '') }}</textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Benefit 3 -->
+                        <div class="benefit-config-section">
+                            <h3>🎯 Voordeel 3</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="config_benefit_3_icon">Icoon</label>
+                                    <input type="text" id="config_benefit_3_icon" name="config_benefit_3_icon" value="{{ get_config_value('benefit_3_icon', '🎉') }}" placeholder="Bijv. 🎉">
+                                    <small>Emoji of symbool voor dit voordeel</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="config_benefit_3_title">Titel</label>
+                                    <input type="text" id="config_benefit_3_title" name="config_benefit_3_title" value="{{ get_config_value('benefit_3_title', '') }}" placeholder="Titel van voordeel 3">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="config_benefit_3_description">Beschrijving</label>
+                                <textarea id="config_benefit_3_description" name="config_benefit_3_description" rows="2" placeholder="Beschrijving van voordeel 3">{{ get_config_value('benefit_3_description', '') }}</textarea>
+                            </div>
+                        </div>
+                        
+                        <!-- Benefit 4 -->
+                        <div class="benefit-config-section">
+                            <h3>🎯 Voordeel 4</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="config_benefit_4_icon">Icoon</label>
+                                    <input type="text" id="config_benefit_4_icon" name="config_benefit_4_icon" value="{{ get_config_value('benefit_4_icon', '💰') }}" placeholder="Bijv. 💰">
+                                    <small>Emoji of symbool voor dit voordeel</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="config_benefit_4_title">Titel</label>
+                                    <input type="text" id="config_benefit_4_title" name="config_benefit_4_title" value="{{ get_config_value('benefit_4_title', '') }}" placeholder="Titel van voordeel 4">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="config_benefit_4_description">Beschrijving</label>
+                                <textarea id="config_benefit_4_description" name="config_benefit_4_description" rows="2" placeholder="Beschrijving van voordeel 4">{{ get_config_value('benefit_4_description', '') }}</textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             

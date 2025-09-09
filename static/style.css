@@ -219,7 +219,7 @@ section {
 }
 
 .invitation-content {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
     background: var(--card-bg);
     padding: 3rem;
@@ -251,8 +251,10 @@ section {
 
 .benefit-cards {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .benefit-card {
@@ -295,7 +297,7 @@ section {
 }
 
 .registration-form-container {
-    max-width: 800px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
@@ -399,7 +401,7 @@ section {
     }
     
     .benefit-cards {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
     }
     
     .form-row {
@@ -449,6 +451,10 @@ section {
     
     .invitation-content {
         padding: 1.5rem 1rem;
+    }
+    
+    .benefit-cards {
+        grid-template-columns: 1fr;
     }
 }
 

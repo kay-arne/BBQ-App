@@ -377,7 +377,19 @@ def initialize_default_config():
         'primary_color': ('#FF8C00', 'Primaire kleur van de applicatie', 'appearance'),
         'secondary_color': ('#FF6B35', 'Secundaire kleur van de applicatie', 'appearance'),
         'hero_title': ('DE BBQ DIE JOUW EVENEMENT TRANSFORMEERT IN EEN GASTRONOMISCHE ERVARING', 'Hero titel op de hoofdpagina', 'content'),
-        'hero_subtitle': ('Edel vlees, onweerstaanbare bijgerechten en een complete service zodat jij de gast bent op je eigen feest.', 'Hero ondertitel op de hoofdpagina', 'content')
+        'hero_subtitle': ('Edel vlees, onweerstaanbare bijgerechten en een complete service zodat jij de gast bent op je eigen feest.', 'Hero ondertitel op de hoofdpagina', 'content'),
+        'benefit_1_title': ('HEERLIJK VLEES', 'Titel van voordeel 1', 'benefits'),
+        'benefit_1_description': ('Geniet van premium vlees dat perfect bereid wordt door onze ervaren BBQ-chefs.', 'Beschrijving van voordeel 1', 'benefits'),
+        'benefit_1_icon': ('🍖', 'Icoon van voordeel 1', 'benefits'),
+        'benefit_2_title': ('BUURTGEVOEL', 'Titel van voordeel 2', 'benefits'),
+        'benefit_2_description': ('Ontmoet je buren en bouw nieuwe vriendschappen in een gezellige sfeer.', 'Beschrijving van voordeel 2', 'benefits'),
+        'benefit_2_icon': ('👥', 'Icoon van voordeel 2', 'benefits'),
+        'benefit_3_title': ('GEZELLIGHEID', 'Titel van voordeel 3', 'benefits'),
+        'benefit_3_description': ('Een ontspannen avond met lekker eten, drankjes en gezellige gesprekken.', 'Beschrijving van voordeel 3', 'benefits'),
+        'benefit_3_icon': ('🎉', 'Icoon van voordeel 3', 'benefits'),
+        'benefit_4_title': ('GOEDE PRIJS', 'Titel van voordeel 4', 'benefits'),
+        'benefit_4_description': ('Alles inclusief voor een eerlijke prijs - geen verborgen kosten.', 'Beschrijving van voordeel 4', 'benefits'),
+        'benefit_4_icon': ('💰', 'Icoon van voordeel 4', 'benefits')
     }
     
     for key, (value, description, category) in defaults.items():
