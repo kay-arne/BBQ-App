@@ -360,18 +360,18 @@
                             </div>
                             <small>Upload een nieuwe hero afbeelding (JPG, PNG, GIF). Maximaal 5MB.</small>
                         </div>
-                        
-                        <!-- Not Planned Mode Configuration -->
-                        <div class="form-group" style="margin-top: 2rem;">
-                            <label for="config_not_planned_mode">📅 Niet Gepland Modus</label>
-                            <div class="form-group">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="config_not_planned_mode" name="config_not_planned_mode" value="1" {% if get_config_value('not_planned_mode', '0') == '1' %}checked{% endif %}>
-                                    <span class="checkmark"></span>
-                                    Activeren wanneer BBQ niet gepland is
-                                </label>
-                                <small>Wanneer geactiveerd wordt het aanmeldformulier verborgen en wordt alternatieve tekst getoond</small>
-                            </div>
+                    </div>
+                    
+                    <!-- Not Planned Mode Configuration -->
+                    <div class="config-section">
+                        <h3>📅 Niet Gepland Modus</h3>
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="config_not_planned_mode" name="config_not_planned_mode" value="1" {% if get_config_value('not_planned_mode', '0') == '1' %}checked{% endif %}>
+                                <span class="checkmark"></span>
+                                Activeren wanneer BBQ niet gepland is
+                            </label>
+                            <small>Wanneer geactiveerd wordt het aanmeldformulier verborgen en wordt alternatieve tekst getoond</small>
                         </div>
                         
                         <div class="form-group">
