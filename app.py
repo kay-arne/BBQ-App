@@ -652,7 +652,7 @@ def update_config():
 
         # Map tabs to their corresponding configuration categories
         tab_to_category_map = {
-            'variables': ['general', 'bbq'],
+            'variables': ['general', 'bbq', 'variables'],
             'content': ['content'],
             'benefits': ['benefits'],
             'style': ['appearance'],
