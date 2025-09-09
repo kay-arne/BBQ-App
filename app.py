@@ -389,7 +389,9 @@ def initialize_default_config():
         'benefit_3_icon': ('🎉', 'Icoon van voordeel 3', 'benefits'),
         'benefit_4_title': ('GOEDE PRIJS', 'Titel van voordeel 4', 'benefits'),
         'benefit_4_description': ('Alles inclusief voor een eerlijke prijs - geen verborgen kosten.', 'Beschrijving van voordeel 4', 'benefits'),
-        'benefit_4_icon': ('💰', 'Icoon van voordeel 4', 'benefits')
+        'benefit_4_icon': ('💰', 'Icoon van voordeel 4', 'benefits'),
+        'price_per_adult': ('15', 'Prijs per volwassene in euro', 'variables'),
+        'price_per_child': ('8', 'Prijs per kind in euro', 'variables')
     }
     
     for key, (value, description, category) in defaults.items():

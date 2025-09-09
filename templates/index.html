@@ -124,38 +124,37 @@
                         </div>
                     </div>
                     
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="houseNumber">Huisnummer *</label>
-                            <input type="text" id="houseNumber" name="houseNumber" required placeholder="Bijv. 46 of 46a">
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone">Telefoon / WhatsApp</label>
-                            <input type="tel" id="phone" name="phone" placeholder="Uw telefoonnummer">
-                        </div>
+                    <div class="form-group">
+                        <label for="houseNumber">Huisnummer *</label>
+                        <input type="text" id="houseNumber" name="houseNumber" required placeholder="Bijv. 46 of 46a">
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="personsAdults">Aantal Volwassenen *</label>
-                            <input type="number" id="personsAdults" name="personsAdults" required min="1" max="20" placeholder="Aantal volwassenen">
+                            <input type="number" id="personsAdults" name="personsAdults" required min="1" max="20" placeholder="Aantal volwassenen" onchange="updatePrice()">
                         </div>
                         
                         <div class="form-group">
                             <label for="personsChildren">Aantal Kinderen</label>
-                            <input type="number" id="personsChildren" name="personsChildren" min="0" max="20" placeholder="Aantal kinderen">
+                            <input type="number" id="personsChildren" name="personsChildren" min="0" max="20" placeholder="Aantal kinderen" onchange="updatePrice()">
                         </div>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="allergies">Allergieën / Dieetwensen</label>
-                        <textarea id="allergies" name="allergies" rows="3" placeholder="Vermeld hier eventuele allergieën of dieetwensen"></textarea>
+                    <div class="price-display">
+                        <div class="price-info">
+                            <span class="price-label">Totaalbedrag:</span>
+                            <span class="price-amount" id="totalPrice">€{{ get_config_value('price_per_adult', '15') }}</span>
+                        </div>
+                        <small class="price-breakdown">
+                            Volwassenen: €{{ get_config_value('price_per_adult', '15') }} per persoon | 
+                            Kinderen: €{{ get_config_value('price_per_child', '8') }} per persoon
+                        </small>
                     </div>
                     
                     <div class="form-group">
-                        <label for="comments">Opmerkingen</label>
-                        <textarea id="comments" name="comments" rows="3" placeholder="Eventuele opmerkingen of speciale wensen"></textarea>
+                        <label for="allergies">Allergieën / Dieetwensen / Opmerkingen</label>
+                        <textarea id="allergies" name="allergies" rows="3" placeholder="Vermeld hier eventuele allergieën, dieetwensen of andere opmerkingen"></textarea>
                     </div>
                     
                     <button type="submit" class="cta-button primary submit-button">
@@ -187,6 +186,21 @@
                 behavior: 'smooth' 
             });
         }
+        
+        function updatePrice() {
+            const adults = parseInt(document.getElementById('personsAdults').value) || 0;
+            const children = parseInt(document.getElementById('personsChildren').value) || 0;
+            const adultPrice = {{ get_config_value('price_per_adult', '15') }};
+            const childPrice = {{ get_config_value('price_per_child', '8') }};
+            
+            const totalPrice = (adults * adultPrice) + (children * childPrice);
+            document.getElementById('totalPrice').textContent = '€' + totalPrice;
+        }
+        
+        // Initialize price on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updatePrice();
+        });
     </script>
 </body>
 </html>
