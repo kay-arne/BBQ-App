@@ -816,8 +816,8 @@ def register_and_pay():
                         <p>Je hebt je aangemeld voor <strong>{persons_adults} volwassene(n)</strong> en <strong>{persons_children} kind(eren)</strong>.</p>
                         <p>Het totaalbedrag voor de volwassenen is <strong>€{total_amount:.2f}</strong>.</p>
                         <p>Uw aanmelding en betaling worden nu door ons geverifieerd. Zodra alles in orde is, ontvangt u een aparte e-mail met een definitieve bevestiging.</p>
-                        <p>Datum BBQ: {bbq_details["date"]}. Locatie: {bbq_details["location"]}.</p>
-                        <p>Uiterste opgavedatum: {bbq_details["deadline"]}.</p>
+                        <p>Datum BBQ: {get_config_value('date', 'zaterdag 6 september')}. Locatie: {get_config_value('location', 'familie Smit aan de Kamperweg 46')}.</p>
+                        <p>Uiterste opgavedatum: {get_config_value('deadline', '22 augustus')}.</p>
                         <p>We kijken ernaar uit u te zien!</p>
                         <p>Met hartelijke groet,</p>
                         <p>Bestuur buurt Kamperweg</p>
