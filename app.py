@@ -1217,4 +1217,5 @@ signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == '__main__':
     logger.info("Starting BBQ application with performance optimizations...")
-    app.run(debug=True, port=3000, threaded=True)
+    debug_mode = os.getenv('FLASK_ENV') != 'production'
+    app.run(host='0.0.0.0', debug=debug_mode, port=3000, threaded=True)
