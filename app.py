@@ -380,7 +380,7 @@ def initialize_default_config():
         'smtp_username': (SMTP_USERNAME or '', 'SMTP gebruikersnaam', 'email'),
         'smtp_password': (SMTP_PASSWORD or '', 'SMTP wachtwoord', 'email'),
         'organizer_email': (ORGANIZER_EMAIL or '', 'E-mailadres van de organisator', 'email'),
-        'background_image': ('bbq_achtergrond.png', 'Achtergrondafbeelding', 'appearance'),
+        'hero_image': ('bbq_achtergrond.png', 'Hero afbeelding', 'appearance'),
         'primary_color': ('#FF8C00', 'Primaire kleur van de applicatie', 'appearance'),
         'secondary_color': ('#FF6B35', 'Secundaire kleur van de applicatie', 'appearance'),
         'hero_title': ('WELKOM BIJ ONZE JAARLIJKSE BUURT BBQ', 'Hero titel op de hoofdpagina', 'content'),
@@ -669,8 +669,8 @@ def update_config():
         }
 
         # Handle file upload for the 'style' tab
-        if active_tab == 'style' and 'background_image' in request.files:
-            file = request.files['background_image']
+        if active_tab == 'style' and 'hero_image' in request.files:
+            file = request.files['hero_image']
             if file and file.filename and allowed_file(file.filename):
                 filename = secure_filename(file.filename)
                 timestamp = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -678,8 +678,8 @@ def update_config():
                 filepath = os.path.join(UPLOAD_FOLDER, filename)
                 file.save(filepath)
                 # Use set_config to preserve description and category for new uploads
-                set_config('background_image', f'uploads/{filename}', description='Achtergrondafbeelding', category='appearance')
-                flash('Achtergrond afbeelding succesvol geüpload!', 'success')
+                set_config('hero_image', f'uploads/{filename}', description='Hero afbeelding', category='appearance')
+                flash('Hero afbeelding succesvol geüpload!', 'success')
 
         # Process and save only the form fields relevant to the active tab
         categories_to_update = tab_to_category_map.get(active_tab, [])
@@ -707,7 +707,7 @@ def reset_style_config():
         default_style_config = {
             'primary_color': '#FF8C00',
             'secondary_color': '#FF6B35',
-            'background_image': 'bbq_achtergrond.png'
+            'hero_image': 'bbq_achtergrond.png'
         }
         
         # Reset only style configuration values

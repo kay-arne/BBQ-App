@@ -24,9 +24,9 @@
             --border-color: #404040;
         }
         
-        {% if get_config_value('background_image') %}
+        {% if get_config_value('hero_image') %}
         .hero-section {
-            background-image: url('{{ url_for('static', filename=get_config_value('background_image')) }}');
+            background-image: url('{{ url_for('static', filename=get_config_value('hero_image')) }}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;

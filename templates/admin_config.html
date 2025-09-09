@@ -407,23 +407,23 @@
                     <h2>🎨 Stijl</h2>
                     <p class="tab-description">Pas de kleuren en achtergrond van de applicatie aan om het aan te passen aan uw huisstijl.</p>
                     
-                    <!-- Background Image Upload -->
+                    <!-- Hero Image Upload -->
                     <div class="config-section">
-                        <h3>🖼️ Achtergrond Afbeelding</h3>
+                        <h3>🖼️ Hero Afbeelding</h3>
                         <div class="form-group">
-                            <label for="background_image">Upload Achtergrond</label>
+                            <label for="hero_image">Upload Hero Afbeelding</label>
                             <div class="file-upload-container">
-                                <input type="file" id="background_image" name="background_image" accept="image/*" onchange="previewImage(this)">
-                                <div class="file-upload-preview" id="imagePreview" style="display: none;">
-                                    <img id="previewImg" src="" alt="Preview">
-                                    <button type="button" onclick="removeImage()" class="btn btn-small btn-danger">🗑️ Verwijder</button>
+                                <input type="file" id="hero_image" name="hero_image" accept="image/*" onchange="previewHeroImage(this)">
+                                <div class="file-upload-preview" id="heroImagePreview" style="display: none;">
+                                    <img id="previewHeroImg" src="" alt="Preview">
+                                    <button type="button" onclick="removeHeroImage()" class="btn btn-small btn-danger">🗑️ Verwijder</button>
                                 </div>
-                                <div class="current-image" id="currentImage" style="display: none;">
-                                    <p>Huidige achtergrond:</p>
-                                    <img id="currentImg" src="" alt="Current background">
+                                <div class="current-image" id="currentHeroImage" style="display: none;">
+                                    <p>Huidige hero afbeelding:</p>
+                                    <img id="currentHeroImg" src="" alt="Current hero">
                                 </div>
                             </div>
-                            <small>Upload een nieuwe achtergrond afbeelding (JPG, PNG, GIF). Maximaal 5MB.</small>
+                            <small>Upload een nieuwe hero afbeelding (JPG, PNG, GIF). Maximaal 5MB.</small>
                         </div>
                     </div>
                     
@@ -805,12 +805,12 @@
         });
 
         // Image upload preview functionality
-        function previewImage(input) {
+        function previewHeroImage(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const preview = document.getElementById('imagePreview');
-                    const previewImg = document.getElementById('previewImg');
+                    const preview = document.getElementById('heroImagePreview');
+                    const previewImg = document.getElementById('previewHeroImg');
                     previewImg.src = e.target.result;
                     preview.style.display = 'block';
                 };
@@ -818,9 +818,9 @@
             }
         }
 
-        function removeImage() {
-            const input = document.getElementById('background_image');
-            const preview = document.getElementById('imagePreview');
+        function removeHeroImage() {
+            const input = document.getElementById('hero_image');
+            const preview = document.getElementById('heroImagePreview');
             input.value = '';
             preview.style.display = 'none';
         }
