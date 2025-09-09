@@ -374,8 +374,8 @@ def initialize_default_config():
         'smtp_password': (SMTP_PASSWORD or '', 'SMTP wachtwoord', 'email'),
         'organizer_email': (ORGANIZER_EMAIL or '', 'E-mailadres van de organisator', 'email'),
         'background_image': ('bbq_achtergrond.png', 'Achtergrondafbeelding', 'appearance'),
-        'primary_color': ('#e74c3c', 'Primaire kleur van de applicatie', 'appearance'),
-        'secondary_color': ('#3498db', 'Secundaire kleur van de applicatie', 'appearance')
+        'primary_color': ('#FF8C00', 'Primaire kleur van de applicatie', 'appearance'),
+        'secondary_color': ('#FF6B35', 'Secundaire kleur van de applicatie', 'appearance')
     }
     
     for key, (value, description, category) in defaults.items():
@@ -677,8 +677,8 @@ def reset_style_config():
     try:
         # Get default style configuration only
         default_style_config = {
-            'primary_color': '#e74c3c',
-            'secondary_color': '#3498db',
+            'primary_color': '#FF8C00',
+            'secondary_color': '#FF6B35',
             'background_image': 'bbq_achtergrond.png'
         }
         

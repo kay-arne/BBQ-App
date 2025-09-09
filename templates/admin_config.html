@@ -14,8 +14,49 @@
     <!-- Dynamic color customization -->
     <style>
         :root {
-            --primary-color: {{ get_config_value('primary_color', '#e74c3c') }};
-            --secondary-color: {{ get_config_value('secondary_color', '#f39c12') }};
+            --primary-color: {{ get_config_value('primary_color', '#FF8C00') }};
+            --secondary-color: {{ get_config_value('secondary_color', '#FF6B35') }};
+            --dark-bg: #1a1a1a;
+            --darker-bg: #0f0f0f;
+            --text-white: #ffffff;
+            --text-light: #e0e0e0;
+            --card-bg: #2a2a2a;
+            --border-color: #404040;
+        }
+        
+        body {
+            background: var(--darker-bg);
+            color: var(--text-white);
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            background: var(--darker-bg);
+            border: 2px solid var(--border-color);
+            color: var(--text-white);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: var(--primary-color);
+        }
+        
+        .tab-button {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+        }
+        
+        .tab-button.active {
+            background: var(--primary-color);
+            color: var(--text-white);
         }
     </style>
     <!-- Simple Custom Editor - No external API needed -->
