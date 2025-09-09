@@ -58,6 +58,80 @@
             background: var(--primary-color);
             color: var(--text-white);
         }
+        
+        /* Config Sections */
+        .config-section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .config-section h3 {
+            margin: 0 0 1.5rem 0;
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .config-section .variables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        /* Variable Info Styling */
+        .variable-info {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .variable-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .variable-group {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .variable-group h4 {
+            margin: 0 0 0.75rem 0;
+            color: var(--primary-color);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .variable-group ul {
+            margin: 0;
+            padding-left: 1.2rem;
+        }
+        
+        .variable-group li {
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+        }
+        
+        .variable-group code {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.2rem 0.4rem;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
     </style>
     <!-- Simple Custom Editor - No external API needed -->
 </head>
@@ -102,54 +176,82 @@
                     <h2>📊 Variabelen</h2>
                     <p class="tab-description">Deze variabelen worden automatisch vervangen in de hoofdinhoud van de pagina. Ze zorgen ervoor dat de informatie altijd actueel is.</p>
                     
-                    <div class="variables-grid">
-                        {% for setting in configs.get('general', []) %}
-                            {% if setting.key == 'app_title' %}
-                            <div class="form-group">
-                                <label for="config_{{ setting.key }}">{{ setting.description }}</label>
-                                <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
-                                <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
-                            </div>
-                            {% endif %}
-                        {% endfor %}
-                        
-                        {% for setting in configs.get('bbq', []) %}
-                        <div class="form-group">
-                            <label for="config_{{ setting.key }}">{{ setting.description }}</label>
-                            {% if setting.key == 'bbq_price_per_adult' %}
-                                <input type="number" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" step="0.01" placeholder="{{ setting.description }}">
-                            {% else %}
-                                <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
-                            {% endif %}
-                            <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                    <!-- Algemene Instellingen -->
+                    <div class="config-section">
+                        <h3>🏷️ Algemene Instellingen</h3>
+                        <div class="variables-grid">
+                            {% for setting in configs.get('general', []) %}
+                                {% if setting.key == 'app_title' %}
+                                <div class="form-group">
+                                    <label for="config_{{ setting.key }}">{{ setting.description }}</label>
+                                    <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                                    <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
                         </div>
-                        {% endfor %}
-                        
-                        {% for setting in configs.get('variables', []) %}
-                        <div class="form-group">
-                            <label for="config_{{ setting.key }}">{{ setting.description }}</label>
-                            {% if setting.key in ['price_per_adult', 'price_per_child'] %}
-                                <input type="number" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" step="0.01" placeholder="{{ setting.description }}">
-                            {% else %}
-                                <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
-                            {% endif %}
-                            <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
-                        </div>
-                        {% endfor %}
                     </div>
                     
+                    <!-- BBQ Evenement Details -->
+                    <div class="config-section">
+                        <h3>🎉 BBQ Evenement Details</h3>
+                        <div class="variables-grid">
+                            {% for setting in configs.get('bbq', []) %}
+                                {% if setting.key != 'bbq_price_per_adult' %}
+                                <div class="form-group">
+                                    <label for="config_{{ setting.key }}">{{ setting.description }}</label>
+                                    <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                                    <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!-- Prijzen -->
+                    <div class="config-section">
+                        <h3>💰 Prijzen</h3>
+                        <div class="variables-grid">
+                            {% for setting in configs.get('variables', []) %}
+                                {% if setting.key in ['price_per_adult', 'price_per_child'] %}
+                                <div class="form-group">
+                                    <label for="config_{{ setting.key }}">{{ setting.description }}</label>
+                                    <input type="number" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" step="0.01" placeholder="{{ setting.description }}">
+                                    <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <!-- Variabelen Uitleg -->
                     <div class="variable-info">
                         <h3>🔍 Hoe variabelen werken</h3>
                         <p>Deze variabelen kunnen gebruikt worden in de hoofdinhoud en e-mails:</p>
-                        <ul>
-                            <li><code>{date}</code> - Wordt vervangen door de BBQ datum</li>
-                            <li><code>{location}</code> - Wordt vervangen door de locatie</li>
-                            <li><code>{price}</code> - Wordt vervangen door de prijs per volwassene</li>
-                            <li><code>{price_adult}</code> - Wordt vervangen door de prijs per volwassene</li>
-                            <li><code>{price_child}</code> - Wordt vervangen door de prijs per kind</li>
-                            <li><code>{deadline}</code> - Wordt vervangen door de aanmelddeadline</li>
-                            <li><code>{contact_phone}</code> - Wordt vervangen door het contact telefoonnummer</li>
-                        </ul>
+                        <div class="variable-list">
+                            <div class="variable-group">
+                                <h4>📅 Datum & Locatie</h4>
+                                <ul>
+                                    <li><code>{date}</code> - BBQ datum</li>
+                                    <li><code>{location}</code> - BBQ locatie</li>
+                                    <li><code>{deadline}</code> - Aanmelddeadline</li>
+                                </ul>
+                            </div>
+                            <div class="variable-group">
+                                <h4>💰 Prijzen</h4>
+                                <ul>
+                                    <li><code>{price}</code> - Prijs per volwassene</li>
+                                    <li><code>{price_adult}</code> - Prijs per volwassene (alternatief)</li>
+                                    <li><code>{price_child}</code> - Prijs per kind</li>
+                                </ul>
+                            </div>
+                            <div class="variable-group">
+                                <h4>📞 Contact</h4>
+                                <ul>
+                                    <li><code>{contact_phone}</code> - Contact telefoonnummer</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

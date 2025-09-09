@@ -371,7 +371,6 @@ def initialize_default_config():
     defaults = {
         'app_title': ('BBQ Aanmeldingen 2025', 'Titel van de applicatie', 'general'),
         'bbq_date': ('zaterdag 15 juni', 'Datum van de BBQ', 'bbq'),
-        'bbq_price_per_adult': ('25.00', 'Prijs per volwassene in euro', 'bbq'),
         'bbq_location': ('het buurthuis', 'Locatie van de BBQ', 'bbq'),
         'bbq_deadline': ('10 juni', 'Deadline voor aanmelding', 'bbq'),
         'bbq_contact_phone': ('06-12345678', 'Contact telefoonnummer', 'bbq'),
@@ -489,7 +488,7 @@ def delete_admin(admin_id):
 def get_cached_bbq_details():
     """Cache BBQ details from configuration"""
     return {
-        "price_per_adult": float(get_config('bbq_price_per_adult', 25.00)),
+        "price_per_adult": float(get_config('price_per_adult', 25.00)),
         "date": get_config('bbq_date', "zaterdag 15 juni"),
         "location": get_config('bbq_location', "het buurthuis"),
         "deadline": get_config('bbq_deadline', "10 juni"),
