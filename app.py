@@ -82,15 +82,15 @@ SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
 ORGANIZER_EMAIL = os.getenv('ORGANIZER_EMAIL')
 
 # Bunq.me basis URL
-BUNQ_ME_BASE_URL = os.getenv('BUNQ_ME_BASE_URL', "https://bunq.me/kamperwegBBQ")
+BUNQ_ME_BASE_URL = os.getenv('BUNQ_ME_BASE_URL', "https://bunq.me/buurtBBQ")
 
 # BBQ details from environment variables
 BBQ_DETAILS = {
-    "price_per_adult": float(os.getenv('BBQ_PRICE_PER_ADULT', 28.50)),
-    "date": os.getenv('BBQ_DATE', "zaterdag 6 september"),
-    "location": os.getenv('BBQ_LOCATION', "familie Smit aan de Kamperweg 46"),
-    "deadline": os.getenv('BBQ_DEADLINE', "22 augustus"),
-    "contact_kay_phone": os.getenv('BBQ_CONTACT_PHONE', "06-83699549")
+    "price_per_adult": float(os.getenv('BBQ_PRICE_PER_ADULT', 25.00)),
+    "date": os.getenv('BBQ_DATE', "zaterdag 15 juni"),
+    "location": os.getenv('BBQ_LOCATION', "het buurthuis"),
+    "deadline": os.getenv('BBQ_DEADLINE', "10 juni"),
+    "contact_kay_phone": os.getenv('BBQ_CONTACT_PHONE', "06-12345678")
 }
 
 # Database setup - Fixed path
@@ -362,12 +362,12 @@ def initialize_default_config():
     
     defaults = {
         'app_title': ('BBQ Aanmeldingen 2025', 'Titel van de applicatie', 'general'),
-        'bbq_date': ('zaterdag 6 september', 'Datum van de BBQ', 'bbq'),
-        'bbq_price_per_adult': ('28.50', 'Prijs per volwassene in euro', 'bbq'),
-        'bbq_location': ('familie Smit aan de Kamperweg 46', 'Locatie van de BBQ', 'bbq'),
-        'bbq_deadline': ('22 augustus', 'Deadline voor aanmelding', 'bbq'),
-        'bbq_contact_phone': ('06-83699549', 'Contact telefoonnummer', 'bbq'),
-        'main_content': ('<h2>🎉 Welkom bij ons jaarlijkse buurtfeest!</h2><p><strong>Beste Kamperweg buurtgenoten,</strong></p><p>Hartelijk welkom op het digitale aanmeldformulier voor ons jaarlijkse tuinfeest met BBQ. Dit jaar houden we ons feest op <strong>{date}</strong>. We zijn voor ons feest welkom bij de <strong>{location}</strong>. De inloop is vanaf <strong>16.00 uur.</strong></p><p>De kosten voor de BBQ bedragen <strong>€{price} per volwassene</strong>. Alles is inbegrepen: een complete BBQ, op- en afbouw tuinfeest, schoonmaak BBQ\'s, koffie, thee en overige (non) alcoholische dranken. Thuiswonende kinderen mogen gratis mee. Wel vragen we u vriendelijk om op te geven of en hoeveel kinderen er meekomen.</p><p>Met dit formulier kunt u zich direct aanmelden. Na het invullen en verzenden van dit formulier wordt u automatisch doorverwezen naar een betaalpagina waar u de verschuldigde kosten direct kunt voldoen.</p><p>Meldt u zich alstublieft <strong>uiterlijk {deadline}</strong> aan via dit formulier. We hopen u allemaal te zien op <strong>{date}</strong>!</p><p>Met hartelijke groet,</p><p><strong>Bestuur buurt Kamperweg</strong></p>', 'Hoofdinhoud van de aanmeldpagina (HTML)', 'content'),
+        'bbq_date': ('zaterdag 15 juni', 'Datum van de BBQ', 'bbq'),
+        'bbq_price_per_adult': ('25.00', 'Prijs per volwassene in euro', 'bbq'),
+        'bbq_location': ('het buurthuis', 'Locatie van de BBQ', 'bbq'),
+        'bbq_deadline': ('10 juni', 'Deadline voor aanmelding', 'bbq'),
+        'bbq_contact_phone': ('06-12345678', 'Contact telefoonnummer', 'bbq'),
+        'main_content': ('<h2>🎉 Welkom bij ons jaarlijkse buurtfeest!</h2><p><strong>Beste buurtgenoten,</strong></p><p>Hartelijk welkom op het digitale aanmeldformulier voor ons jaarlijkse tuinfeest met BBQ. Dit jaar houden we ons feest op <strong>{date}</strong>. We zijn voor ons feest welkom bij <strong>{location}</strong>. De inloop is vanaf <strong>16.00 uur.</strong></p><p>De kosten voor de BBQ bedragen <strong>€{price} per volwassene</strong>. Alles is inbegrepen: een complete BBQ, op- en afbouw tuinfeest, schoonmaak BBQ\'s, koffie, thee en overige (non) alcoholische dranken. Thuiswonende kinderen mogen gratis mee. Wel vragen we u vriendelijk om op te geven of en hoeveel kinderen er meekomen.</p><p>Met dit formulier kunt u zich direct aanmelden. Na het invullen en verzenden van dit formulier wordt u automatisch doorverwezen naar een betaalpagina waar u de verschuldigde kosten direct kunt voldoen.</p><p>Meldt u zich alstublieft <strong>uiterlijk {deadline}</strong> aan via dit formulier. We hopen u allemaal te zien op <strong>{date}</strong>!</p><p>Met hartelijke groet,</p><p><strong>Het organisatieteam</strong></p>', 'Hoofdinhoud van de aanmeldpagina (HTML)', 'content'),
         'smtp_server': (SMTP_SERVER or '', 'SMTP server voor e-mail', 'email'),
         'smtp_port': (str(SMTP_PORT), 'SMTP poort', 'email'),
         'smtp_username': (SMTP_USERNAME or '', 'SMTP gebruikersnaam', 'email'),
@@ -376,8 +376,8 @@ def initialize_default_config():
         'background_image': ('bbq_achtergrond.png', 'Achtergrondafbeelding', 'appearance'),
         'primary_color': ('#FF8C00', 'Primaire kleur van de applicatie', 'appearance'),
         'secondary_color': ('#FF6B35', 'Secundaire kleur van de applicatie', 'appearance'),
-        'hero_title': ('DE BBQ DIE JOUW EVENEMENT TRANSFORMEERT IN EEN GASTRONOMISCHE ERVARING', 'Hero titel op de hoofdpagina', 'content'),
-        'hero_subtitle': ('Edel vlees, onweerstaanbare bijgerechten en een complete service zodat jij de gast bent op je eigen feest.', 'Hero ondertitel op de hoofdpagina', 'content'),
+        'hero_title': ('WELKOM BIJ ONZE JAARLIJKSE BUURT BBQ', 'Hero titel op de hoofdpagina', 'content'),
+        'hero_subtitle': ('Geniet van heerlijk eten, gezellige sfeer en ontmoet je buren tijdens ons jaarlijkse buurtfeest.', 'Hero ondertitel op de hoofdpagina', 'content'),
         'benefit_1_title': ('HEERLIJK VLEES', 'Titel van voordeel 1', 'benefits'),
         'benefit_1_description': ('Geniet van premium vlees dat perfect bereid wordt door onze ervaren BBQ-chefs.', 'Beschrijving van voordeel 1', 'benefits'),
         'benefit_1_icon': ('🍖', 'Icoon van voordeel 1', 'benefits'),
@@ -390,8 +390,8 @@ def initialize_default_config():
         'benefit_4_title': ('GOEDE PRIJS', 'Titel van voordeel 4', 'benefits'),
         'benefit_4_description': ('Alles inclusief voor een eerlijke prijs - geen verborgen kosten.', 'Beschrijving van voordeel 4', 'benefits'),
         'benefit_4_icon': ('💰', 'Icoon van voordeel 4', 'benefits'),
-        'price_per_adult': ('15', 'Prijs per volwassene in euro', 'variables'),
-        'price_per_child': ('8', 'Prijs per kind in euro', 'variables'),
+        'price_per_adult': ('25', 'Prijs per volwassene in euro', 'variables'),
+        'price_per_child': ('12', 'Prijs per kind in euro', 'variables'),
         'payment_method': ('none', 'Betaalmethode (none, bunq)', 'payment'),
         'bunq_me_link': ('', 'Bunq.me betaallink', 'payment'),
         'no_payment_message': ('Uw aanmelding is succesvol ontvangen! Wij nemen binnenkort contact met u op voor de betaling.', 'Bericht bij geen betalingsintegratie', 'payment')
@@ -481,11 +481,11 @@ def delete_admin(admin_id):
 def get_cached_bbq_details():
     """Cache BBQ details from configuration"""
     return {
-        "price_per_adult": float(get_config('bbq_price_per_adult', 28.50)),
-        "date": get_config('bbq_date', "zaterdag 6 september"),
-        "location": get_config('bbq_location', "familie Smit aan de Kamperweg 46"),
-        "deadline": get_config('bbq_deadline', "22 augustus"),
-        "contact_kay_phone": get_config('bbq_contact_phone', "06-83699549")
+        "price_per_adult": float(get_config('bbq_price_per_adult', 25.00)),
+        "date": get_config('bbq_date', "zaterdag 15 juni"),
+        "location": get_config('bbq_location', "het buurthuis"),
+        "deadline": get_config('bbq_deadline', "10 juni"),
+        "contact_kay_phone": get_config('bbq_contact_phone', "06-12345678")
     }
 
 def get_db_connection():
@@ -817,7 +817,7 @@ def register_and_pay():
                 )
                 registration_id = cursor.lastrowid
                 conn.commit()
-                logger.info(f"Aanmelding opgeslagen met ID: {registration_id} voor {name} (Kamperweg {house_number})")
+                logger.info(f"Aanmelding opgeslagen met ID: {registration_id} voor {name} (Huisnummer {house_number})")
                 flash('Aanmelding succesvol opgeslagen.', 'success')
 
                 # --- E-mails versturen ---
@@ -835,16 +835,16 @@ def register_and_pay():
                     body_user = f"""
                     <html>
                     <body>
-                        <p>Beste {name} (Kamperweg {house_number}),</p>
+                        <p>Beste {name} (Huisnummer {house_number}),</p>
                         <p>Hartelijk dank voor je aanmelding voor de Buurt BBQ!</p>
                         <p>Je hebt je aangemeld voor <strong>{persons_adults} volwassene(n)</strong> en <strong>{persons_children} kind(eren)</strong>.</p>
                         {payment_info}
                         <p>{payment_status_text}</p>
-                        <p>Datum BBQ: {get_config_value('date', 'zaterdag 6 september')}. Locatie: {get_config_value('location', 'familie Smit aan de Kamperweg 46')}.</p>
-                        <p>Uiterste opgavedatum: {get_config_value('deadline', '22 augustus')}.</p>
+                        <p>Datum BBQ: {get_config_value('date', 'zaterdag 15 juni')}. Locatie: {get_config_value('location', 'het buurthuis')}.</p>
+                        <p>Uiterste opgavedatum: {get_config_value('deadline', '10 juni')}.</p>
                         <p>We kijken ernaar uit u te zien!</p>
                         <p>Met hartelijke groet,</p>
-                        <p>Bestuur buurt Kamperweg</p>
+                        <p>Het organisatieteam</p>
                     </body>
                     </html>
                     """
@@ -852,7 +852,7 @@ def register_and_pay():
                         flash(f'Fout bij versturen bevestigingsmail naar {email}.', 'error')
 
                 # E-mail naar de organisator met tabeloverzicht
-                subject_organizer = f"NIEUWE BBQ AANMELDING: {name} (Kamperweg {house_number})"
+                subject_organizer = f"NIEUWE BBQ AANMELDING: {name} (Huisnummer {house_number})"
                 
                 # Different organizer email content based on payment method
                 if payment_method == 'bunq' and payment_url:
@@ -889,7 +889,7 @@ def register_and_pay():
                         </tr>
                         <tr>
                             <td><strong>Adres:</strong></td>
-                            <td>Kamperweg {house_number}</td>
+                            <td>Huisnummer {house_number}</td>
                         </tr>
                         <tr>
                             <td><strong>E-mail:</strong></td>
@@ -1092,12 +1092,12 @@ def update_registration_status(reg_id):
                     body_paid = f"""
                     <html>
                     <body>
-                        <p>Beste {current_name} (Kamperweg {current_reg['house_number']}),</p>
+                        <p>Beste {current_name} (Huisnummer {current_reg['house_number']}),</p>
                         <p>Goed nieuws! Uw betaling van <strong>€{total_amount_for_reg:.2f}</strong> voor de Buurt BBQ is zojuist door de organisatie <strong>verwerkt en bevestigd</strong>.</p>
                         <p>U bent nu officieel aangemeld voor {current_reg['persons_adults']} volwassene(n) en {current_reg['persons_children']} kind(eren).</p>
                         <p>Wij kijken ernaar uit u te zien op ons tuinfeest op <strong>{bbq_details["date"]}</strong>!</p>
                         <p>Met vriendelijke groet,</p>
-                        <p>Bestuur buurt Kamperweg</p>
+                        <p>Het organisatieteam</p>
                     </body>
                     </html>
                     """
