@@ -430,15 +430,17 @@
                         <h3>🎨 Kleuren</h3>
                         <div class="variables-grid">
                             {% for setting in configs.get('appearance', []) %}
-                            <div class="form-group">
-                                <label for="config_{{ setting.key }}">{{ setting.description }}</label>
-                                {% if setting.key in ['primary_color', 'secondary_color'] %}
-                                    <input type="color" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '#e74c3c' }}">
-                                {% else %}
-                                    <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                                {% if setting.key not in ['hero_image'] %}
+                                <div class="form-group">
+                                    <label for="config_{{ setting.key }}">{{ setting.description }}</label>
+                                    {% if setting.key in ['primary_color', 'secondary_color'] %}
+                                        <input type="color" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '#e74c3c' }}">
+                                    {% else %}
+                                        <input type="text" id="config_{{ setting.key }}" name="config_{{ setting.key }}" value="{{ setting.value or '' }}" placeholder="{{ setting.description }}">
+                                    {% endif %}
+                                    <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
+                                </div>
                                 {% endif %}
-                                <small>Laatst bijgewerkt: {{ setting.updated_at }}</small>
-                            </div>
                             {% endfor %}
                         </div>
                     </div>
