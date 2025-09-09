@@ -348,7 +348,7 @@ def get_all_config():
 
 def cleanup_old_config():
     """Remove old configuration fields that are no longer used"""
-    old_fields = ['welcome_text', 'description_text']
+    old_fields = ['welcome_text', 'description_text', 'background_image']
     
     with db_pool.get_connection() as conn:
         cursor = conn.cursor()
