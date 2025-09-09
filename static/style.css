@@ -1040,7 +1040,6 @@ section {
     width: 90%;
     max-width: 600px;
     box-shadow: var(--shadow-heavy);
-    border: 1px solid var(--border-color);
     position: relative;
 }
 
