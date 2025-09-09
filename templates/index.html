@@ -107,6 +107,22 @@
     <!-- Registration Form Section -->
     <section class="registration-section" id="registration-form">
         <div class="container">
+            {% if get_config_value('not_planned_mode', '0') == '1' %}
+            <!-- Not Planned Mode - Registration Not Available -->
+            <div class="section-header">
+                <h2 class="section-title">AANMELDEN NIET MOGELIJK</h2>
+            </div>
+            
+            <div class="registration-form-container">
+                <div class="registration-not-available">
+                    <div class="not-available-content">
+                        <h3>Aanmelden is op dit moment niet mogelijk</h3>
+                        <p>De volgende BBQ is nog niet gepland. Houd deze pagina in de gaten voor updates over wanneer aanmelden weer mogelijk is.</p>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <!-- Normal Mode - Registration Form -->
             <div class="section-header">
                 <h2 class="section-title">MELD JE AAN</h2>
                 <p class="section-subtitle">Vul het formulier hieronder in om deel te nemen aan onze BBQ</p>
@@ -167,6 +183,7 @@
                     </button>
                 </form>
             </div>
+            {% endif %}
         </div>
     </section>
 

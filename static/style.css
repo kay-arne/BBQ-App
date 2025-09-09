@@ -328,6 +328,30 @@ section {
     box-shadow: var(--shadow-medium);
 }
 
+/* Registration Not Available Styling */
+.registration-not-available {
+    background: var(--card-bg);
+    padding: 3rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-medium);
+    text-align: center;
+}
+
+.not-available-content h3 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+}
+
+.not-available-content p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
 
 .form-row {
     display: grid;
