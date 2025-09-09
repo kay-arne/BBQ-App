@@ -722,6 +722,8 @@ section {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-light);
     border: 1px solid var(--border-color);
+    width: 100%;
+    max-width: none;
 }
 
 .admin-form h3 {
@@ -770,6 +772,66 @@ section {
 .admin-form .form-group input::placeholder,
 .admin-form .form-group textarea::placeholder {
     color: #888;
+}
+
+/* Admin Form Inline Layout */
+.admin-form .form-group-inline {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.admin-form .form-group-inline.two-columns {
+    grid-template-columns: 1fr 1fr;
+}
+
+.admin-form .input-inline {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-form .input-inline label {
+    display: block;
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.admin-form .input-inline input,
+.admin-form .input-inline select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-small);
+    background: var(--darker-bg);
+    color: var(--text-color);
+    font-size: 0.9rem;
+    transition: var(--transition);
+    box-sizing: border-box;
+}
+
+.admin-form .input-inline input:focus,
+.admin-form .input-inline select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 140, 0, 0.1);
+}
+
+/* Responsive form layout */
+@media (max-width: 1024px) {
+    .admin-form .form-group-inline {
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-form .form-group-inline {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
 }
 
 /* Admin Button Styles */
