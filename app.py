@@ -82,12 +82,16 @@ def render_main_content():
     # Return as safe HTML (Markup)
     return Markup(content)
 
-# E-mail configuratie
-SMTP_SERVER = os.getenv('SMTP_SERVER')
-SMTP_PORT = int(os.getenv('SMTP_PORT', 587))
-SMTP_USERNAME = os.getenv('SMTP_USERNAME')
-SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
-ORGANIZER_EMAIL = os.getenv('ORGANIZER_EMAIL')
+# E-mail configuratie - wordt gelezen uit database via get_config()
+def get_smtp_config():
+    """Get SMTP configuration from database"""
+    return {
+        'server': get_config('smtp_server', ''),
+        'port': int(get_config('smtp_port', 587)),
+        'username': get_config('smtp_username', ''),
+        'password': get_config('smtp_password', ''),
+        'organizer_email': get_config('organizer_email', '')
+    }
 
 # Bunq.me basis URL
 BUNQ_ME_BASE_URL = os.getenv('BUNQ_ME_BASE_URL', "https://bunq.me/buurtBBQ")
@@ -172,7 +176,14 @@ class EmailQueue:
         """Synchronous email sending (moved from original function)"""
         to_email, subject, body_html, is_html = email_data
         
-        if not all([SMTP_SERVER, SMTP_PORT, SMTP_USERNAME, SMTP_PASSWORD]):
+        # Get SMTP configuration from database
+        smtp_config = get_smtp_config()
+        smtp_server = smtp_config['server']
+        smtp_port = smtp_config['port']
+        smtp_username = smtp_config['username']
+        smtp_password = smtp_config['password']
+        
+        if not all([smtp_server, smtp_username, smtp_password]):
             logger.warning("E-mail configuratie onvolledig. E-mail kan niet worden verstuurd.")
             return False
         if not to_email:
@@ -181,7 +192,7 @@ class EmailQueue:
         
         try:
             msg = MIMEMultipart("alternative")
-            msg['From'] = SMTP_USERNAME
+            msg['From'] = smtp_username
             msg['To'] = to_email
             msg['Subject'] = subject
 
@@ -190,17 +201,17 @@ class EmailQueue:
             else:
                 msg.attach(MIMEText(body_html, 'plain'))
 
-            with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
+            with smtplib.SMTP(smtp_server, smtp_port) as server:
                 server.starttls()
-                server.login(SMTP_USERNAME, SMTP_PASSWORD)
+                server.login(smtp_username, smtp_password)
                 server.send_message(msg)
             logger.info(f"E-mail succesvol verstuurd naar {to_email}")
             return True
         except smtplib.SMTPAuthenticationError:
-            logger.error(f"SMTP Authenticatie fout: Controleer gebruikersnaam en wachtwoord/app-wachtwoord voor {SMTP_USERNAME}.")
+            logger.error(f"SMTP Authenticatie fout: Controleer gebruikersnaam en wachtwoord/app-wachtwoord voor {smtp_username}.")
             return False
         except smtplib.SMTPConnectError as e:
-            logger.error(f"SMTP Verbindingsfout met {SMTP_SERVER}:{SMTP_PORT}: {e}. Controleer server en poort.")
+            logger.error(f"SMTP Verbindingsfout met {smtp_server}:{smtp_port}: {e}. Controleer server en poort.")
             return False
         except Exception as e:
             logger.error(f"Algemene fout bij versturen e-mail naar {to_email}: {e}")
@@ -375,11 +386,11 @@ def initialize_default_config():
         'bbq_deadline': ('10 juni', 'Deadline voor aanmelding', 'bbq'),
         'bbq_contact_phone': ('06-12345678', 'Contact telefoonnummer', 'bbq'),
         'main_content': ('<h2>🎉 Welkom bij ons jaarlijkse buurtfeest!</h2><p><strong>Beste buurtgenoten,</strong></p><p>Hartelijk welkom op het digitale aanmeldformulier voor ons jaarlijkse tuinfeest met BBQ. Dit jaar houden we ons feest op <strong>{date}</strong>. We zijn voor ons feest welkom bij <strong>{location}</strong>. De inloop is vanaf <strong>16.00 uur.</strong></p><p>De kosten voor de BBQ bedragen <strong>€{price} per volwassene</strong>. Alles is inbegrepen: een complete BBQ, op- en afbouw tuinfeest, schoonmaak BBQ\'s, koffie, thee en overige (non) alcoholische dranken. Thuiswonende kinderen mogen gratis mee. Wel vragen we u vriendelijk om op te geven of en hoeveel kinderen er meekomen.</p><p>Met dit formulier kunt u zich direct aanmelden. Na het invullen en verzenden van dit formulier wordt u automatisch doorverwezen naar een betaalpagina waar u de verschuldigde kosten direct kunt voldoen.</p><p>Meldt u zich alstublieft <strong>uiterlijk {deadline}</strong> aan via dit formulier. We hopen u allemaal te zien op <strong>{date}</strong>!</p><p>Met hartelijke groet,</p><p><strong>Het organisatieteam</strong></p>', 'Hoofdinhoud van de aanmeldpagina (HTML)', 'content'),
-        'smtp_server': (SMTP_SERVER or '', 'SMTP server voor e-mail', 'email'),
-        'smtp_port': (str(SMTP_PORT), 'SMTP poort', 'email'),
-        'smtp_username': (SMTP_USERNAME or '', 'SMTP gebruikersnaam', 'email'),
-        'smtp_password': (SMTP_PASSWORD or '', 'SMTP wachtwoord', 'email'),
-        'organizer_email': (ORGANIZER_EMAIL or '', 'E-mailadres van de organisator', 'email'),
+        'smtp_server': ('', 'SMTP server voor e-mail', 'email'),
+        'smtp_port': ('587', 'SMTP poort', 'email'),
+        'smtp_username': ('', 'SMTP gebruikersnaam', 'email'),
+        'smtp_password': ('', 'SMTP wachtwoord', 'email'),
+        'organizer_email': (get_config('organizer_email', ''), 'E-mailadres van de organisator', 'email'),
         'hero_image': ('bbq_achtergrond.png', 'Hero afbeelding', 'content'),
         'primary_color': ('#FF8C00', 'Primaire kleur van de applicatie', 'appearance'),
         'secondary_color': ('#FF6B35', 'Secundaire kleur van de applicatie', 'appearance'),
@@ -951,8 +962,9 @@ def register_and_pay():
                 </body>
                 </html>
                 """
-                if not send_email(ORGANIZER_EMAIL, subject_organizer, body_organizer):
-                    flash(f'Fout bij versturen notificatiemail naar {ORGANIZER_EMAIL}.', 'error')
+                organizer_email = get_config('organizer_email', '')
+                if organizer_email and not send_email(organizer_email, subject_organizer, body_organizer):
+                    flash(f'Fout bij versturen notificatiemail naar {organizer_email}.', 'error')
 
                 # Return different response based on payment method
                 if payment_method == 'bunq' and payment_url:
