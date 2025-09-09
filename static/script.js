@@ -46,8 +46,19 @@ function handleFormSubmit(e) {
             return;
         }
 
-    // Prepare form data
+    // Prepare form data as JSON
     const formData = new FormData(form);
+    const jsonData = {};
+    
+    // Convert FormData to JSON object
+    for (let [key, value] of formData.entries()) {
+        // Map field names to API expected names
+        if (key === 'allergies') {
+            jsonData['allergiesNotes'] = value;
+        } else {
+            jsonData[key] = value;
+        }
+    }
     
     // Show loading message
     showMessage('Uw aanmelding wordt verwerkt...', 'info');
@@ -55,20 +66,29 @@ function handleFormSubmit(e) {
     // Submit form
     fetch('/api/register', {
         method: 'POST',
-        body: formData,
+        body: JSON.stringify(jsonData),
         headers: {
+            'Content-Type': 'application/json',
             'X-Requested-With': 'XMLHttpRequest'
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.success) {
+        if (data.paymentUrl) {
             showMessage('Aanmelding succesvol! U wordt doorgestuurd naar de betaalpagina...', 'success');
             setTimeout(() => {
-                window.location.href = data.payment_url || '/success';
+                window.location.href = data.paymentUrl;
             }, 2000);
         } else {
-            showMessage(data.message || 'Er is een fout opgetreden. Probeer het opnieuw.', 'error');
+            showMessage(data.message || 'Aanmelding succesvol!', 'success');
+            setTimeout(() => {
+                window.location.href = '/success';
+            }, 2000);
         }
     })
     .catch(error => {

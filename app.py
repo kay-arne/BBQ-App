@@ -781,8 +781,10 @@ def register_and_pay():
     persons_adults = int(data.get('personsAdults'))
     persons_children = int(data.get('personsChildren', 0))
     allergies_notes = data.get('allergiesNotes', '').strip()
-    bbq_details = get_cached_bbq_details()
-    total_amount = persons_adults * bbq_details["price_per_adult"]
+    # Get prices from database configuration
+    price_per_adult = float(get_config_value('price_per_adult', '15'))
+    price_per_child = float(get_config_value('price_per_child', '8'))
+    total_amount = (persons_adults * price_per_adult) + (persons_children * price_per_child)
 
     payment_url = ""
     try:
